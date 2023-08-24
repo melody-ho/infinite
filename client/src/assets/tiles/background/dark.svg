@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#radial-gradient);
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="25" cy="25" fx="25" fy="25" r="23.39" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00060d"/>
+      <stop offset="1" stop-color="#011126"/>
+    </radialGradient>
+  </defs>
+  <g>
+    <g>
+      <polygon class="cls-1" points="37.5 3.35 12.5 3.35 0 25 12.5 46.65 37.5 46.65 50 25 37.5 3.35"/>
+    </g>
+  </g>
+</svg>

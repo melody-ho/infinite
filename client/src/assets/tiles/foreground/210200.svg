@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        fill: #022859;
+      }
+
+      .cls-5 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-6 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-2 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <polygon id="mask" class="cls-1" points="37.5 3.35 12.5 3.35 0 25 12.5 46.65 37.5 46.65 50 25 37.5 3.35"/>
+    </clipPath>
+    <radialGradient id="radial-gradient" cx="25.01" cy="25" fx="25.01" fy="25" r="16.96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".77" stop-color="#fff" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".05"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="-280.62" cy="-386" fx="-280.62" fy="-386" r="8" gradientTransform="translate(-150.23 450.2) rotate(60)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".15"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g id="_210200" data-name="210200">
+    <g class="cls-2">
+      <path id="stripe" class="cls-4" d="m26,46.66h-2c-.76-7.21-.91-14.43-.95-21.66.03-7.23.18-14.45.95-21.66h2c1.32,14.4,1.31,28.92,0,43.32Z"/>
+      <path id="glow" class="cls-6" d="m27.99,3.16c-.09-1.03-.96-1.82-1.99-1.82h-2c-1.02,0-1.88.78-1.99,1.79-.78,7.39-.93,14.87-.96,21.86.04,7.02.18,14.5.96,21.88.11,1.02.97,1.79,1.99,1.79h2c1.03,0,1.9-.79,1.99-1.82,1.32-14.53,1.32-29.23,0-43.68Zm-1.99,43.5h-2c-.76-7.21-.91-14.43-.95-21.66.03-7.23.18-14.45.95-21.66h2c1.32,14.4,1.31,28.92,0,43.32Z"/>
+      <g id="star">
+        <path class="cls-3" d="m41.99,20.73c1.32-4.92.12-7-4.8-8.31,4.92,1.32,7,.12,8.31-4.8-1.32,4.92-.12,7,4.8,8.31-4.92-1.32-7-.12-8.31,4.8Z"/>
+        <circle class="cls-5" cx="43.75" cy="14.17" r="8"/>
+      </g>
+    </g>
+  </g>
+</svg>
