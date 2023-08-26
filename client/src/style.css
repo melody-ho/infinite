@@ -1,0 +1,6 @@
+.tile,
+.tile__available,
+.tile__background,
+.tile__foreground {
+  position: absolute;
+}
