@@ -1,12 +1,14 @@
+/// Imports ///
+import convertIndex from "../utils/convert-index";
+
+/// Public ///
 /**
  * Get surrounding positions for a given position.
  * @param {string} centerIndex Index for which to get surrounding positions, represented as "x,y".
  * @returns {string[]} Indexes of surrounding positions starting from top going clockwise, each represented as "x,y".
  */
 const getSurrounding = (centerIndex) => {
-  let [x, y] = centerIndex.split(",");
-  x = Number(x);
-  y = Number(y);
+  const [x, y] = convertIndex(centerIndex);
 
   let surrounding;
   if (x % 2 === 0) {
