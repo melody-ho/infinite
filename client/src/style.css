@@ -1,3 +1,11 @@
+.board {
+  background-color: rgb(0, 0, 0);
+  height: 98vh;
+  margin: auto;
+  position: relative;
+  width: 98vw;
+}
+
 .tile,
 .tile__available,
 .tile__background,
