@@ -1,4 +1,4 @@
-import { boardData, addTileData } from "../model/board-data";
+import { boardData, availableIndexes, addTileData } from "../model/board-data";
 
 test("add to empty board", () => {
   addTileData("0,0", "medium", "000000");
@@ -97,4 +97,10 @@ test("add next to existing tile", () => {
       foreground: null,
     },
   });
+});
+
+test("updates available positions", () => {
+  expect(availableIndexes).toEqual(
+    new Set(["0,1", "1,-1", "0,-1", "-1,-1", "-1,0", "1,1", "2,1", "2,0"]),
+  );
 });

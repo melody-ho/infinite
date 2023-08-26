@@ -40,6 +40,12 @@ const addNewAvailable = (centerIndex) => {
 const boardData = {};
 
 /**
+ * Set containing indexes of available positions.
+ * @type {Set}
+ */
+const availableIndexes = new Set();
+
+/**
  * Updates the gameboard, given a new tile to place.
  * @param {tileIndex} index Index to place new tile at.
  * @param {"light" | "medium" | "dark"} background Background of tile to place.
@@ -47,13 +53,21 @@ const boardData = {};
  * @returns {tileIndex[]} Array of indexes representing positions that were updated.
  */
 const addTileData = (index, background, foreground) => {
+  // add tile data to board
   boardData[index] = {
     status: "filled",
     background,
     foreground,
   };
-  const newAvailable = addNewAvailable(index);
-  return [index, ...newAvailable];
+
+  // update available positions
+  availableIndexes.delete(index);
+  const newAvailables = addNewAvailable(index);
+  newAvailables.forEach((newAvailable) => {
+    availableIndexes.add(newAvailable);
+  });
+
+  return [index, ...newAvailables];
 };
 
-export { boardData, addTileData };
+export { boardData, availableIndexes, addTileData };
