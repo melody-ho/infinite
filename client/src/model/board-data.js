@@ -46,11 +46,17 @@ const boardData = {};
 const availableIndexes = new Set();
 
 /**
+ * Array representing next tile to be placed.
+ * @type {[("light" | "medium" | "dark"), foregroundHash]}
+ */
+const nextTile = [];
+
+/**
  * Updates the gameboard, given a new tile to place.
  * @param {tileIndex} index Index to place new tile at.
  * @param {"light" | "medium" | "dark"} background Background of tile to place.
  * @param {foregroundHash} foreground Foreground of tile to place.
- * @returns {tileIndex[]} Array of indexes representing positions that were updated.
+ * @returns {tileIndex[]} Two-element array. First element is the index filled. Second element is an array of new available indexes.
  */
 const addTileData = (index, background, foreground) => {
   // add tile data to board
@@ -67,7 +73,16 @@ const addTileData = (index, background, foreground) => {
     availableIndexes.add(newAvailable);
   });
 
-  return [index, ...newAvailables];
+  return [index, [...newAvailables]];
 };
 
-export { addTileData, availableIndexes, boardData };
+/**
+ * Updates next tile to be placed.
+ * @param {[("light" | "medium" | "dark"), foregroundHash]} tile
+ */
+const updateNextTile = (tile) => {
+  nextTile[0] = tile[0];
+  nextTile[1] = tile[1];
+};
+
+export { addTileData, availableIndexes, boardData, nextTile, updateNextTile };

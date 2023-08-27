@@ -18,27 +18,35 @@ const SIZE = 20;
  * Places tile.
  * @param {string} index Gameboard index to place tile at.
  * @param {[backgroundHash, foregroundHash]} tile Two-element array representing tile to place.
+ * @returns {[]} Indexes of new available tiles.
  */
 const placeTile = (index, tile) => {
-  const listOfUpdated = addTileData(index, ...tile);
+  const [filled, newAvailables] = addTileData(index, ...tile);
 
   const board = document.querySelector(".board");
-  for (let i = 0; i < listOfUpdated.length; i += 1) {
-    const oldTile = document.querySelector(`[index="${listOfUpdated[i]}"]`);
-    const newTile = renderTile(
-      listOfUpdated[i],
+
+  // place new filled tile //
+  const oldTile = document.querySelector(`[index="${filled}"]`);
+  const newTile = renderTile(filled, CENTER_INDEX, CENTER_POSITION, SIZE);
+  if (oldTile !== null) {
+    // replace previous available tile
+    oldTile.parentNode.replaceChild(newTile, oldTile);
+  }
+  // first filled tile is placed on empty board
+  board.appendChild(newTile);
+
+  // place new available tiles //
+  for (let i = 0; i < newAvailables.length; i += 1) {
+    const newAvailable = renderTile(
+      newAvailables[i],
       CENTER_INDEX,
       CENTER_POSITION,
       SIZE,
     );
-    if (oldTile !== null) {
-      // replace previous avaiable tile
-      oldTile.parentNode.replaceChild(newTile, oldTile);
-    } else {
-      // add new available tile
-      board.appendChild(newTile);
-    }
+    board.appendChild(newAvailable);
   }
+
+  return newAvailables;
 };
 
 export default placeTile;

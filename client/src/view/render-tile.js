@@ -80,6 +80,7 @@ const renderTile = (index, centerTile, viewCenter, size) => {
   // create container //
   const newTile = document.createElement("div");
   newTile.classList.add("tile");
+  newTile.setAttribute("index", `${index}`);
   newTile.style.width = `${width}px`;
   newTile.style.height = `${width}px`;
   newTile.style.left = `${position[0]}px`;
