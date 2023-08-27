@@ -1,5 +1,5 @@
 /// Imports ///
-import { boardData, availableIndexes } from "../model/board-data";
+import { availableIndexes, boardData } from "../model/board-data";
 import convertForeground from "../utils/convert-foreground";
 import getSurrounding from "../helpers/get-surrounding";
 

@@ -1,4 +1,4 @@
-import { boardData, availableIndexes, addTileData } from "../model/board-data";
+import { addTileData, availableIndexes, boardData } from "../model/board-data";
 
 test("add to empty board", () => {
   addTileData("0,0", "medium", "000000");

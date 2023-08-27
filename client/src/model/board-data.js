@@ -70,4 +70,4 @@ const addTileData = (index, background, foreground) => {
   return [index, ...newAvailables];
 };
 
-export { boardData, availableIndexes, addTileData };
+export { addTileData, availableIndexes, boardData };
