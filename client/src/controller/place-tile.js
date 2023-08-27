@@ -23,10 +23,22 @@ const placeTile = (index, tile) => {
   const listOfUpdated = addTileData(index, ...tile);
 
   const board = document.querySelector(".board");
-  listOfUpdated.forEach((updated) => {
-    const newTile = renderTile(updated, CENTER_INDEX, CENTER_POSITION, SIZE);
-    board.appendChild(newTile);
-  });
+  for (let i = 0; i < listOfUpdated.length; i += 1) {
+    const oldTile = document.querySelector(`[index="${listOfUpdated[i]}"]`);
+    const newTile = renderTile(
+      listOfUpdated[i],
+      CENTER_INDEX,
+      CENTER_POSITION,
+      SIZE,
+    );
+    if (oldTile !== null) {
+      // replace previous avaiable tile
+      oldTile.parentNode.replaceChild(newTile, oldTile);
+    } else {
+      // add new available tile
+      board.appendChild(newTile);
+    }
+  }
 };
 
 export default placeTile;
