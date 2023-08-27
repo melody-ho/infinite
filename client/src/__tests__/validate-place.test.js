@@ -59,9 +59,9 @@ jest.mock("../model/board-data", () => {
 });
 
 test("evaluates true for valid placement", () => {
-  expect(validatePlace("102120", "0,1")).toBe(true);
+  expect(validatePlace("0,1", "102120")).toBe(true);
 });
 
 test("evaluates false for invalid placement", () => {
-  expect(validatePlace("100010", "0,1")).toBe(false);
+  expect(validatePlace("0,1", "100010")).toBe(false);
 });

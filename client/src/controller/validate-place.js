@@ -6,11 +6,11 @@ import getSurrounding from "../helpers/get-surrounding";
 /// Public ///
 /**
  * Evaluates whether a tile placement is valid.
- * @param {string} foregroundHash Edge types for the attempted tile from top going clockwise, represented as a string of six numeric characters.
  * @param {string} index Index of attempted placement position on the gameboard, represented as "x,y".
+ * @param {string} foregroundHash Edge types for the attempted tile from top going clockwise, represented as a string of six numeric characters.
  * @returns {boolean} Returns true if valid placement and false if invalid placement.
  */
-const validatePlace = (foregroundHash, index) => {
+const validatePlace = (index, foregroundHash) => {
   // get own edge types from top going clockwise
   const edgeTypes = convertForeground(foregroundHash);
 
