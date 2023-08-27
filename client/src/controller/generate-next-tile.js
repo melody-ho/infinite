@@ -1,5 +1,6 @@
 /// Imports ///
 import { boardData, availableIndexes } from "../model/board-data";
+import convertForeground from "../utils/convert-foreground";
 import getSurrounding from "../helpers/get-surrounding";
 
 /// Constants ///
@@ -43,13 +44,6 @@ const STRIPE_PROBABILITY = 2;
  */
 
 /// Private ///
-/**
- * Converts foreground hash to array of edge types.
- * @param {foregroundHash} foregroundHash String representing tile foreground.
- * @returns {[]} Foreground edge types from top going clockwise, each represented as a numeric character.
- */
-const convertForeground = (foregroundHash) => foregroundHash.split("");
-
 /**
  * Returns random element in an array.
  * @param {[]} arr
