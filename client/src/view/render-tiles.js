@@ -145,6 +145,7 @@ const renderNextTile = (size) => {
     const [frontSvg, rotation] = getForeground(foreground);
     front.setAttribute("src", foregrounds[`${frontSvg}.svg`]);
     front.style.transform = `rotate(${rotation}deg)`;
+    front.setAttribute("rotation", `${rotation}`);
     // appending in this order ensures foreground is shown in front of background
     tile.appendChild(front);
     tile.insertBefore(back, front);
