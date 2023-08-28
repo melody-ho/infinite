@@ -1,6 +1,6 @@
 /// Imports ///
 import { addTileData } from "../model/board-data";
-import renderTile from "../view/render-tile";
+import { renderTile } from "../view/render-tiles";
 
 /// Constants ///
 // TO DO: make these dynamic when implementing drag and zoom //

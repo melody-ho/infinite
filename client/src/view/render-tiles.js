@@ -1,6 +1,6 @@
 /// Imports ///
 // modules
-import { boardData } from "../model/board-data";
+import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 
@@ -118,4 +118,48 @@ const renderTile = (index, centerTile, viewCenter, size) => {
   return newTile;
 };
 
-export default renderTile;
+/**
+ * Creates DOM element showing the next tile to be placed.
+ * @param {number} size Size of tiles in pixels.
+ * @returns Newly created DOM element showing the next tile to be placed.
+ */
+const renderNextTile = (size) => {
+  const [background, foreground] = nextTile;
+  const width = size * SIZE_FACTOR;
+
+  // create container //
+  const tile = document.createElement("div");
+  tile.classList.add("next-tile");
+  tile.style.width = `${width}px`;
+  tile.style.height = `${width}px`;
+
+  // fill container //
+  // render background
+  const back = document.createElement("img");
+  back.classList.add("next-tile__background");
+  back.setAttribute("src", backgrounds[`${background}.svg`]);
+  // render foreground
+  if (foreground !== "000000") {
+    const front = document.createElement("img");
+    front.classList.add("next-tile__foreground");
+    const [frontSvg, rotation] = getForeground(foreground);
+    front.setAttribute("src", foregrounds[`${frontSvg}.svg`]);
+    front.style.transform = `rotate(${rotation}deg)`;
+    // appending in this order ensures foreground is shown in front of background
+    tile.appendChild(front);
+    tile.insertBefore(back, front);
+  } else {
+    tile.appendChild(back);
+  }
+
+  // add listener for following cursor//
+  const board = document.querySelector(".board");
+  board.addEventListener("mousemove", (e) => {
+    tile.style.left = `${e.clientX - width / 2}px`;
+    tile.style.top = `${e.clientY - width / 2}px`;
+  });
+
+  return tile;
+};
+
+export { renderNextTile, renderTile };

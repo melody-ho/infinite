@@ -2,13 +2,22 @@
   background-color: rgb(0, 0, 0);
   height: 98vh;
   margin: auto;
+  overflow: hidden;
   position: relative;
   width: 98vw;
 }
 
+.next-tile,
+.next-tile__background,
+.next-tile__foreground,
 .tile,
 .tile__available,
 .tile__background,
 .tile__foreground {
   position: absolute;
+}
+
+.next-tile {
+  pointer-events: none;
+  z-index: 1;
 }
