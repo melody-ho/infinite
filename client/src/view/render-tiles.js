@@ -89,7 +89,8 @@ const renderTile = (index, centerTile, viewCenter, size) => {
 
   // fill container //
   if (tileData.status === "available") {
-    // render as available position //
+    // available position //
+    // render image
     const available = document.createElement("img");
     available.classList.add("tile__available");
     available.setAttribute("src", backgrounds["available.svg"]);
@@ -98,7 +99,7 @@ const renderTile = (index, centerTile, viewCenter, size) => {
     // append
     newTile.appendChild(available);
   } else {
-    // render as filled position //
+    // filled position //
     // render background
     const back = document.createElement("img");
     back.classList.add("tile__background");
@@ -157,7 +158,7 @@ const renderNextTile = (size) => {
     tile.appendChild(back);
   }
 
-  // add listener for following cursor//
+  // add listener for following cursor //
   const board = document.querySelector(".board");
   board.addEventListener("mousemove", (e) => {
     tile.style.left = `${e.clientX - width / 2}px`;
