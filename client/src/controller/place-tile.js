@@ -2,11 +2,11 @@
 import { addTileData, updateNextTile } from "../model/board-data";
 import generateNextTile from "./generate-next-tile";
 import { renderNextTile, renderTile } from "../view/render-tiles";
+import { viewCenter } from "../model/view-data";
 
 /// Constants ///
 // TO DO: make these dynamic when implementing drag and zoom //
 const CENTER_INDEX = "0,0";
-const CENTER_POSITION = [750, 500];
 const SIZE = 20;
 
 /**
@@ -27,7 +27,7 @@ const placeTile = (index, tile) => {
 
   // place new filled tile //
   const oldTile = document.querySelector(`[index="${filled}"]`);
-  const newTile = renderTile(filled, CENTER_INDEX, CENTER_POSITION, SIZE);
+  const newTile = renderTile(filled, CENTER_INDEX, viewCenter, SIZE);
   if (oldTile !== null) {
     // replace previous available tile
     oldTile.parentNode.replaceChild(newTile, oldTile);
@@ -40,7 +40,7 @@ const placeTile = (index, tile) => {
     const newAvailable = renderTile(
       newAvailables[i],
       CENTER_INDEX,
-      CENTER_POSITION,
+      viewCenter,
       SIZE,
     );
     board.appendChild(newAvailable);
