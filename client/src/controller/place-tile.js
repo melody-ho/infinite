@@ -1,6 +1,7 @@
 /// Imports ///
-import { addTileData } from "../model/board-data";
-import { renderTile } from "../view/render-tiles";
+import { addTileData, updateNextTile } from "../model/board-data";
+import generateNextTile from "./generate-next-tile";
+import { renderNextTile, renderTile } from "../view/render-tiles";
 
 /// Constants ///
 // TO DO: make these dynamic when implementing drag and zoom //
@@ -15,7 +16,7 @@ const SIZE = 20;
 
 /// Public ///
 /**
- * Places tile.
+ * Places tile and proceeds to next move.
  * @param {string} index Gameboard index to place tile at.
  * @param {[backgroundHash, foregroundHash]} tile Two-element array representing tile to place.
  */
@@ -44,6 +45,18 @@ const placeTile = (index, tile) => {
     );
     board.appendChild(newAvailable);
   }
+
+  // proceed to next move //
+  // generate next tile
+  updateNextTile(generateNextTile());
+  // remove previous if present
+  const previous = document.querySelector(".next-tile");
+  if (previous !== null) {
+    previous.remove();
+  }
+  // render and append next tile
+  const nextTile = renderNextTile(SIZE);
+  board.appendChild(nextTile);
 };
 
 export default placeTile;
