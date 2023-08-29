@@ -1,11 +1,10 @@
-/// Private ///
+/// Public ///
 /**
  * Absolute position of center tile on view. Represented as [x,y] in pixels.
  * @type {[number, number]}
  */
 const viewCenter = [];
 
-/// Public ///
 /**
  * Updates view center.
  * @param {[number, number]} newCenter New view center, represented as absolute position [x,y] in pixels.
