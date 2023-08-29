@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        fill: #022859;
+      }
+
+      .cls-5 {
+        fill: url(#radial-gradient-3);
+      }
+
+      .cls-6 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-7 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-2 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <polygon id="mask" class="cls-1" points="50 25 37.5 3.35 12.5 3.35 0 25 12.5 46.65 37.5 46.65 50 25"/>
+    </clipPath>
+    <radialGradient id="radial-gradient" cx="25" cy="13.24" fx="25" fy="13.24" r="9.41" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset=".77" stop-color="#fff" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".05"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="25" cy="3.35" fx="25" fy="3.35" r="8" gradientTransform="translate(50 50) rotate(-180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff" stop-opacity=".15"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-3" cx="43.75" cy="35.82" fx="43.75" fy="35.82" r="8" xlink:href="#radial-gradient-2"/>
+  </defs>
+  <g id="_200101" data-name="200101">
+    <g class="cls-2">
+      <path id="stripe" class="cls-4" d="m26,23.31c-.12.52-.56.78-1,.78s-.89-.26-1-.78c-.77-3.31-.43-6.65-.44-10,.07-3.33.19-6.67.44-10,.05-.61.53-.91,1-.91s.95.3,1,.91c.25,3.33.37,6.67.44,10-.01,3.35.33,6.69-.44,10Z"/>
+      <path id="glow" class="cls-7" d="m28.47,15.66c0-.78-.03-1.56-.03-2.34-.06-2.82-.16-6.48-.45-10.16-.12-1.58-1.41-2.76-2.99-2.76s-2.86,1.18-2.99,2.75c-.29,3.69-.39,7.35-.45,10.12,0,.83-.02,1.61-.03,2.39-.06,2.63-.12,5.34.52,8.1.3,1.36,1.52,2.33,2.95,2.33s2.64-.96,2.95-2.34c.64-2.75.58-5.46.52-8.09Zm-2.47,7.65c-.12.52-.56.78-1,.78s-.89-.26-1-.78c-.77-3.31-.43-6.65-.44-10,.07-3.33.19-6.67.44-10,.05-.61.53-.91,1-.91s.95.3,1,.91c.25,3.33.37,6.67.44,10-.01,3.35.33,6.69-.44,10Z"/>
+      <g id="star">
+        <path class="cls-3" d="m20.2,41.85c3.6,3.6,6,3.6,9.6,0-3.6,3.6-3.6,6,0,9.6-3.6-3.6-6-3.6-9.6,0,3.6-3.6,3.6-6,0-9.6Z"/>
+        <circle class="cls-6" cx="25" cy="46.65" r="8"/>
+      </g>
+      <g id="star-2" data-name="star">
+        <path class="cls-3" d="m4.49,7.62c1.32,4.92,3.4,6.12,8.31,4.8-4.92,1.32-6.12,3.4-4.8,8.31-1.32-4.92-3.4-6.12-8.31-4.8,4.92-1.32,6.12-3.4,4.8-8.31Z"/>
+        <circle class="cls-5" cx="6.25" cy="14.18" r="8"/>
+      </g>
+    </g>
+  </g>
+</svg>

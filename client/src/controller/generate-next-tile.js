@@ -105,14 +105,6 @@ const generateNextTile = () => {
    * null indicates not yet generated.
    */
   const edges = new Array(6).fill(null);
-  /**
-   * Array of tile edges that do not have adjacent tiles.
-   */
-  const noAdjacents = [];
-  /**
-   * Number of stripe edges so far.
-   */
-  let stripes = 0;
 
   // fill in edges
   const surrounding = getSurrounding(index);
@@ -124,23 +116,10 @@ const generateNextTile = () => {
       // current edge has adjacent tile
       const type = convertForeground(tileData.foreground)[complementary];
       edges[i] = type;
-      if (type === STRIPE) stripes += 1;
     } else {
       // current edge has no adjacent tile
-      noAdjacents.push(i);
       edges[i] = generateRandomEdge();
-      if (edges[i] === STRIPE) stripes += 1;
     }
-  }
-
-  // ensure there isn't only one stripe edge
-  if (stripes === 1) {
-    // make a random non-stripe edge with no adjacent tiles a stripe edge
-    let randomNoAdjacent;
-    do {
-      randomNoAdjacent = getRandomInArray(noAdjacents);
-    } while (edges[randomNoAdjacent] === STRIPE);
-    edges[randomNoAdjacent] = STRIPE;
   }
 
   // randomly rotate foreground //
