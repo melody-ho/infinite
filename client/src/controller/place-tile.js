@@ -18,7 +18,6 @@ const SIZE = 20;
  * Places tile.
  * @param {string} index Gameboard index to place tile at.
  * @param {[backgroundHash, foregroundHash]} tile Two-element array representing tile to place.
- * @returns {[]} Indexes of new available tiles.
  */
 const placeTile = (index, tile) => {
   const [filled, newAvailables] = addTileData(index, ...tile);
@@ -45,8 +44,6 @@ const placeTile = (index, tile) => {
     );
     board.appendChild(newAvailable);
   }
-
-  return newAvailables;
 };
 
 export default placeTile;

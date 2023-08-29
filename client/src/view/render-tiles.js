@@ -3,6 +3,7 @@
 import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
+import listenAvailable from "../view/listen-available";
 
 // assets
 function importAll(r) {
@@ -92,6 +93,9 @@ const renderTile = (index, centerTile, viewCenter, size) => {
     const available = document.createElement("img");
     available.classList.add("tile__available");
     available.setAttribute("src", backgrounds["available.svg"]);
+    // add listener
+    listenAvailable(newTile);
+    // append
     newTile.appendChild(available);
   } else {
     // render as filled position //
