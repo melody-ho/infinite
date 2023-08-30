@@ -4,7 +4,7 @@ import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 import listenAvailable from "../view/listen-available";
-import { panBounds } from "../model/view-data";
+import { panBounds, tileSize } from "../model/view-data";
 
 // assets
 function importAll(r) {
@@ -46,10 +46,10 @@ const getCoordinates = (self, center) => {
  * @param {string} self Index of tile itself.
  * @param {string} center Index of tile at view center.
  * @param {[number, number]} viewCenter Absolute position of tile at view center, represented as [left, bottom] (in pixels).
- * @param {number} size Size of tiles in pixels.
  * @returns {[number, number]} Absolute position represented as [left, bottom] (in pixels).
  */
-const getViewPosition = (self, center, viewCenter, size) => {
+const getViewPosition = (self, center, viewCenter) => {
+  const size = tileSize.get;
   const coordinates = getCoordinates(self, center);
 
   const xDistance = 3 * size * coordinates[0];
@@ -102,13 +102,13 @@ const updatePanBounds = (viewPosition) => {
  * @param {string} index Index of tile to render.
  * @param {string} centerTile Index of tile at view center.
  * @param {[number, number]} viewCenter Absolute position of tile at view center, represented as [left, bottom] (in pixels).
- * @param {number} size Size of tiles in pixels.
  * @returns {Object} Newly created DOM element for the tile specified.
  */
-const renderTile = (index, centerTile, viewCenter, size) => {
+const renderTile = (index, centerTile, viewCenter) => {
   // get information needed //
   const tileData = boardData[index];
-  const position = getViewPosition(index, centerTile, viewCenter, size);
+  const position = getViewPosition(index, centerTile, viewCenter);
+  const size = tileSize.get;
   const width = size * SIZE_FACTOR;
 
   // update pan boundaries //
@@ -161,11 +161,11 @@ const renderTile = (index, centerTile, viewCenter, size) => {
 
 /**
  * Creates DOM element showing the next tile to be placed.
- * @param {number} size Size of tiles in pixels.
  * @returns Newly created DOM element showing the next tile to be placed.
  */
-const renderNextTile = (size) => {
+const renderNextTile = () => {
   const [background, foreground] = nextTile;
+  const size = tileSize.get;
   const width = size * SIZE_FACTOR;
 
   // create container //

@@ -1,5 +1,12 @@
 /// Imports ///
-import { panBounds, panValue, panX, panY, viewSize } from "../model/view-data";
+import {
+  panBounds,
+  panValue,
+  panX,
+  panY,
+  tileSize,
+  viewSize,
+} from "../model/view-data";
 
 /// Constants ///
 /**
@@ -10,8 +17,6 @@ const SPEED = 20;
  * tile width  = tile size * SIZE_FACTOR
  */
 const SIZE_FACTOR = 4;
-// TO DO: make size dynamic when implementing zoom //
-const SIZE = 20;
 
 /// Private ///
 /**
@@ -27,7 +32,7 @@ const pan = () => {
  * Increase x of pan value if within bounds.
  */
 const increaseX = () => {
-  if (panValue[0] < viewSize[0] - panBounds.left - SIZE * SIZE_FACTOR) {
+  if (panValue[0] < viewSize[0] - panBounds.left - tileSize.get * SIZE_FACTOR) {
     panX(SPEED);
   }
 };
@@ -54,7 +59,9 @@ const increaseY = () => {
  * Decrease y of pan value if within bounds.
  */
 const decreaseY = () => {
-  if (panValue[1] > -(viewSize[1] - panBounds.bottom - SIZE * SIZE_FACTOR)) {
+  if (
+    panValue[1] > -(viewSize[1] - panBounds.bottom - tileSize.get * SIZE_FACTOR)
+  ) {
     panY(-SPEED);
   }
 };

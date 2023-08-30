@@ -5,9 +5,11 @@ import { renderNextTile, renderTile } from "../view/render-tiles";
 import { viewCenter } from "../model/view-data";
 
 /// Constants ///
-// TO DO: make these dynamic when implementing drag and zoom //
+/**
+ * Index of tile at view center.
+ * @type {string} "x,y"
+ */
 const CENTER_INDEX = "0,0";
-const SIZE = 20;
 
 /**
  * @typedef {string} foregroundHash Tile edge types from top going clockwise, represented as a string of six numbers.
@@ -27,7 +29,7 @@ const placeTile = (index, tile) => {
 
   // place new filled tile //
   const oldTile = document.querySelector(`[index="${filled}"]`);
-  const newTile = renderTile(filled, CENTER_INDEX, viewCenter, SIZE);
+  const newTile = renderTile(filled, CENTER_INDEX, viewCenter);
   if (oldTile !== null) {
     // replace previous available tile
     oldTile.parentNode.replaceChild(newTile, oldTile);
@@ -37,12 +39,7 @@ const placeTile = (index, tile) => {
 
   // place new available tiles //
   for (let i = 0; i < newAvailables.length; i += 1) {
-    const newAvailable = renderTile(
-      newAvailables[i],
-      CENTER_INDEX,
-      viewCenter,
-      SIZE,
-    );
+    const newAvailable = renderTile(newAvailables[i], CENTER_INDEX, viewCenter);
     board.appendChild(newAvailable);
   }
 
@@ -55,7 +52,7 @@ const placeTile = (index, tile) => {
     previous.remove();
   }
   // render and append next tile
-  const nextTile = renderNextTile(SIZE);
+  const nextTile = renderNextTile();
   board.appendChild(nextTile);
 };
 

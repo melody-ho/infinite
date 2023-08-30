@@ -4,9 +4,11 @@ import { renderNextTile, renderTile } from "./render-tiles";
 import { viewCenter } from "../model/view-data";
 
 /// Constants ///
-// TO DO: make these dynamic when implementing drag and zoom //
+/**
+ * Index of tile at view center.
+ * @type {string} "x,y"
+ */
 const CENTER_INDEX = "0,0";
-const SIZE = 20;
 
 /// Public ///
 /**
@@ -16,11 +18,11 @@ const renderBoard = () => {
   const board = document.querySelector(".board");
   const indexes = Object.keys(boardData);
   for (let i = 0; i < indexes.length; i += 1) {
-    const tile = renderTile(indexes[i], CENTER_INDEX, viewCenter, SIZE);
+    const tile = renderTile(indexes[i], CENTER_INDEX, viewCenter);
     board.appendChild(tile);
   }
 
-  const nextTile = renderNextTile(SIZE);
+  const nextTile = renderNextTile();
   board.appendChild(nextTile);
 };
 

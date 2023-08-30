@@ -29,6 +29,32 @@ const panBounds = {
 };
 
 /**
+ * Object containing current tile size and its getter and setter.
+ * @type {Object}
+ */
+const tileSize = {
+  /**
+   * Size of tiles, in pixels. (width = currentSize * 4)
+   * @type {?number}
+   */
+  currentSize: null,
+  /**
+   * Get tile size, in pixels. (width = tileSize * 4)
+   * @type {?number}
+   */
+  get get() {
+    return this.currentSize;
+  },
+  /**
+   * Set tile size.
+   * @param {number} newSize New size of tiles, in pixels. (width = newSize * 4)
+   */
+  set set(newSize) {
+    this.currentSize = newSize;
+  },
+};
+
+/**
  * Updates view size.
  * @param {[number, number]} newSize New view size, represented as [width, height] in pixels.
  */
@@ -89,6 +115,7 @@ export {
   resetPanBounds,
   setViewCenter,
   setViewSize,
+  tileSize,
   viewCenter,
   viewSize,
 };
