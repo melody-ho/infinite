@@ -1,22 +1,11 @@
 /// Imports ///
-import {
-  panBounds,
-  panValue,
-  panX,
-  panY,
-  tileSize,
-  viewSize,
-} from "../model/view-data";
+import { getPanLimits, panValue, panX, panY } from "../model/view-data";
 
 /// Constants ///
 /**
  * Speed of pan, in pixels.
  */
 const SPEED = 20;
-/**
- * tile width  = tile size * SIZE_FACTOR
- */
-const SIZE_FACTOR = 4;
 
 /// Private ///
 /**
@@ -32,7 +21,7 @@ const pan = () => {
  * Increase x of pan value if within bounds.
  */
 const increaseX = () => {
-  if (panValue[0] < viewSize[0] - panBounds.left - tileSize.get * SIZE_FACTOR) {
+  if (panValue[0] < getPanLimits().xMax) {
     panX(SPEED);
   }
 };
@@ -41,7 +30,7 @@ const increaseX = () => {
  * Decrease x of pan value if within bounds.
  */
 const decreaseX = () => {
-  if (panValue[0] > -panBounds.right) {
+  if (panValue[0] > getPanLimits().xMin) {
     panX(-SPEED);
   }
 };
@@ -50,7 +39,7 @@ const decreaseX = () => {
  * Increase y of pan value if within bounds.
  */
 const increaseY = () => {
-  if (panValue[1] < panBounds.top) {
+  if (panValue[1] < getPanLimits().yMax) {
     panY(SPEED);
   }
 };
@@ -59,9 +48,7 @@ const increaseY = () => {
  * Decrease y of pan value if within bounds.
  */
 const decreaseY = () => {
-  if (
-    panValue[1] > -(viewSize[1] - panBounds.bottom - tileSize.get * SIZE_FACTOR)
-  ) {
+  if (panValue[1] > getPanLimits().yMin) {
     panY(-SPEED);
   }
 };

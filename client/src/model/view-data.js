@@ -1,3 +1,9 @@
+/// Constants ///
+/**
+ * tile width  = tile size * SIZE_FACTOR
+ */
+const SIZE_FACTOR = 4;
+
 /// Public ///
 /**
  * View size. Represented as [width, height] in pixels.
@@ -106,7 +112,21 @@ const resetPanBounds = () => {
   panBounds.left = null;
 };
 
+/**
+ * Calculates pan limits.
+ * @returns {{xMin: number, xMax: number, yMin: number, yMax: number}}
+ */
+const getPanLimits = () => {
+  const xMin = -panBounds.right;
+  const xMax = viewSize[0] - panBounds.left - tileSize.get * SIZE_FACTOR;
+  const yMin = -(viewSize[1] - panBounds.bottom - tileSize.get * SIZE_FACTOR);
+  const yMax = panBounds.top;
+
+  return { xMin, xMax, yMax, yMin };
+};
+
 export {
+  getPanLimits,
   panBounds,
   panValue,
   panX,
