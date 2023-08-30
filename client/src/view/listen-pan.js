@@ -1,11 +1,17 @@
 /// Imports ///
-import { panValue, panX, panY } from "../model/view-data";
+import { panBounds, panValue, panX, panY, viewSize } from "../model/view-data";
 
 /// Constants ///
 /**
  * Speed of pan, in pixels.
  */
 const SPEED = 20;
+/**
+ * tile width  = tile size * SIZE_FACTOR
+ */
+const SIZE_FACTOR = 4;
+// TO DO: make size dynamic when implementing zoom //
+const SIZE = 20;
 
 /// Private ///
 /**
@@ -15,6 +21,42 @@ const pan = () => {
   const board = document.querySelector(".board");
   board.style.setProperty("--move-x", `${panValue[0]}px`);
   board.style.setProperty("--move-y", `${panValue[1]}px`);
+};
+
+/**
+ * Increase x of pan value if within bounds.
+ */
+const increaseX = () => {
+  if (panValue[0] < viewSize[0] - panBounds.left - SIZE * SIZE_FACTOR) {
+    panX(SPEED);
+  }
+};
+
+/**
+ * Decrease x of pan value if within bounds.
+ */
+const decreaseX = () => {
+  if (panValue[0] > -panBounds.right) {
+    panX(-SPEED);
+  }
+};
+
+/**
+ * Increase y of pan value if within bounds.
+ */
+const increaseY = () => {
+  if (panValue[1] < panBounds.top) {
+    panY(SPEED);
+  }
+};
+
+/**
+ * Decrease y of pan value if within bounds.
+ */
+const decreaseY = () => {
+  if (panValue[1] > -(viewSize[1] - panBounds.bottom - SIZE * SIZE_FACTOR)) {
+    panY(-SPEED);
+  }
 };
 
 /// Public ///
@@ -45,39 +87,39 @@ const listenPan = () => {
       s = true;
     }
     if (d && !a && !w && !s) {
-      panX(-SPEED);
+      decreaseX();
       pan();
     }
     if (a && !d && !w && !s) {
-      panX(SPEED);
+      increaseX();
       pan();
     }
     if (w && !d && !a && !s) {
-      panY(SPEED);
+      increaseY();
       pan();
     }
     if (s && !d && !a && !w) {
-      panY(-SPEED);
+      decreaseY();
       pan();
     }
     if (d && w && !a && !s) {
-      panX(-SPEED);
-      panY(SPEED);
+      decreaseX();
+      increaseY();
       pan();
     }
     if (d && s && !a && !w) {
-      panX(-SPEED);
-      panY(-SPEED);
+      decreaseX();
+      decreaseY();
       pan();
     }
     if (a && w && !d && !s) {
-      panX(SPEED);
-      panY(SPEED);
+      increaseX();
+      increaseY();
       pan();
     }
     if (a && s && !d && !w) {
-      panX(SPEED);
-      panY(-SPEED);
+      increaseX();
+      decreaseY();
       pan();
     }
   });

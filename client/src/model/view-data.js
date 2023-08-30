@@ -1,5 +1,11 @@
 /// Public ///
 /**
+ * View size. Represented as [width, height] in pixels.
+ * @type {[number, number]}
+ */
+const viewSize = [];
+
+/**
  * Absolute position of center tile on view. Represented as [x,y] in pixels.
  * @type {[number, number]}
  */
@@ -10,6 +16,26 @@ const viewCenter = [];
  * @type {[number, number]}
  */
 const panValue = [0, 0];
+
+/**
+ * Absolute position of tiles furthest from center, in pixels. Values are null when there are no tiles rendered.
+ * @type {{"top": ?number, "right": ?number, "bottom": ?number, "left": ?number}}
+ */
+const panBounds = {
+  top: null,
+  right: null,
+  bottom: null,
+  left: null,
+};
+
+/**
+ * Updates view size.
+ * @param {[number, number]} newSize New view size, represented as [width, height] in pixels.
+ */
+const setViewSize = (newSize) => {
+  viewSize[0] = newSize[0];
+  viewSize[1] = newSize[1];
+};
 
 /**
  * Updates view center.
@@ -36,4 +62,33 @@ const panY = (change) => {
   panValue[1] += change;
 };
 
-export { panValue, panX, panY, viewCenter, setViewCenter };
+/**
+ * Resets pan values to 0.
+ */
+const resetPan = () => {
+  panValue[0] = 0;
+  panValue[1] = 0;
+};
+
+/**
+ * Reset pan bounds.
+ */
+const resetPanBounds = () => {
+  panBounds.top = null;
+  panBounds.right = null;
+  panBounds.bottom = null;
+  panBounds.left = null;
+};
+
+export {
+  panBounds,
+  panValue,
+  panX,
+  panY,
+  resetPan,
+  resetPanBounds,
+  setViewCenter,
+  setViewSize,
+  viewCenter,
+  viewSize,
+};

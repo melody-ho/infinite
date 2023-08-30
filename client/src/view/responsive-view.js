@@ -1,7 +1,7 @@
 /// Imports ///
 import clearBoardView from "./clear-board-view";
 import renderBoard from "./render-board";
-import { setViewCenter } from "../model/view-data";
+import { setViewCenter, setViewSize } from "../model/view-data";
 
 /// Constants ///
 /**
@@ -16,23 +16,26 @@ const SIZE_FACTOR = 4;
 
 /// Private ///
 /**
- * Gets absolute position of view center and updates view data.
+ * Updates view center and view size in view data.
  */
-const getViewCenter = () => {
+const updateViewData = () => {
   const center = [];
   const board = document.querySelector(".board");
 
-  center[0] = board.offsetWidth / 2 - (SIZE * SIZE_FACTOR) / 2;
-  center[1] = board.offsetHeight / 2 - (SIZE * SIZE_FACTOR) / 2;
+  const viewWidth = board.offsetWidth;
+  const viewHeight = board.offsetHeight;
+  center[0] = viewWidth / 2 - (SIZE * SIZE_FACTOR) / 2;
+  center[1] = viewHeight / 2 - (SIZE * SIZE_FACTOR) / 2;
 
+  setViewSize([viewWidth, viewHeight]);
   setViewCenter(center);
 };
 
 /**
- * Changes view center and rerenders board.
+ * Updates view data and rerenders board.
  */
 const handleResize = () => {
-  getViewCenter();
+  updateViewData();
   clearBoardView();
   renderBoard();
 };
@@ -42,7 +45,7 @@ const handleResize = () => {
  * Initializes view data.
  */
 const initializeView = () => {
-  getViewCenter();
+  updateViewData();
 };
 
 /**

@@ -4,6 +4,7 @@ import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 import listenAvailable from "../view/listen-available";
+import { panBounds } from "../model/view-data";
 
 // assets
 function importAll(r) {
@@ -63,6 +64,38 @@ const getViewPosition = (self, center, viewCenter, size) => {
   return [left, bottom];
 };
 
+/**
+ * Updates pan boundaries when a new tile is rendered.
+ * @param {[number, number]} viewPosition Absolute position of the new tile, represented as [left, bottom] (in pixels).
+ */
+const updatePanBounds = (viewPosition) => {
+  const [left, bottom] = [...viewPosition];
+
+  if (panBounds.top === null) {
+    panBounds.top = bottom;
+  } else if (bottom > panBounds.top) {
+    panBounds.top = bottom;
+  }
+
+  if (panBounds.right === null) {
+    panBounds.right = left;
+  } else if (left > panBounds.right) {
+    panBounds.right = left;
+  }
+
+  if (panBounds.bottom === null) {
+    panBounds.bottom = bottom;
+  } else if (bottom < panBounds.bottom) {
+    panBounds.bottom = bottom;
+  }
+
+  if (panBounds.left === null) {
+    panBounds.left = left;
+  } else if (left < panBounds.left) {
+    panBounds.left = left;
+  }
+};
+
 /// Public ///
 /**
  * Creates DOM element for a specified tile.
@@ -77,6 +110,9 @@ const renderTile = (index, centerTile, viewCenter, size) => {
   const tileData = boardData[index];
   const position = getViewPosition(index, centerTile, viewCenter, size);
   const width = size * SIZE_FACTOR;
+
+  // update pan boundaries //
+  updatePanBounds(position);
 
   // create container //
   const newTile = document.createElement("div");
