@@ -50,7 +50,7 @@ const handleRotateRight = () => {
 
 /// Public ///
 /**
- * Add listeners for rotating next tile.
+ * Adds listener for rotating next tile.
  */
 const listenRotate = () => {
   document.addEventListener("keydown", (e) => {
