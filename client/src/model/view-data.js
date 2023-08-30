@@ -7,6 +7,7 @@ const viewCenter = [];
 
 /**
  * Distance to pan from original position. Represented as [x,y] in pixels.
+ * @type {[number, number]}
  */
 const panValue = [0, 0];
 
