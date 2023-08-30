@@ -2,7 +2,7 @@
   background-color: rgb(0, 0, 0);
   height: 98vh;
   margin: auto;
-  overflow: hidden;
+  overflow: clip;
   position: relative;
   width: 98vw;
 }
@@ -15,6 +15,11 @@
 .tile__background,
 .tile__foreground {
   position: absolute;
+}
+
+.tile {
+  transform: translate(var(--move-x), var(--move-y));
+  transition: transform 0.2s ease;
 }
 
 .next-tile {
