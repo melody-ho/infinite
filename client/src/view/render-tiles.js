@@ -167,6 +167,8 @@ const renderNextTile = () => {
   tile.classList.add("next-tile");
   tile.style.width = `${width}px`;
   tile.style.height = `${width}px`;
+  tile.style.left = `${view.cursorX - width / 2}px`;
+  tile.style.top = `${view.cursorY - width / 2}px`;
 
   // fill container //
   // render background
@@ -193,6 +195,8 @@ const renderNextTile = () => {
   board.addEventListener("mousemove", (e) => {
     tile.style.left = `${e.clientX - width / 2}px`;
     tile.style.top = `${e.clientY - width / 2}px`;
+    view.cursorX = e.clientX;
+    view.cursorY = e.clientY;
   });
 
   return tile;

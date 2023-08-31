@@ -42,7 +42,7 @@ const tileSize = {
 };
 
 /**
- * Object containing view width, view height, view center, and their getters nnd setters.
+ * Object containing view width, view height, view center, cursor position and their getters and setters.
  * @type {Object}
  */
 const view = {
@@ -60,6 +60,11 @@ const view = {
    * Absolute position of center tile. Represented as [x,y] in pixels.
    */
   center: [0, 0],
+  /**
+   * Last logged cursor position. Represented as [x,y] in pixels.
+   * @type {[number, number]}
+   */
+  cursor: [0, 0],
   /**
    * Set new view width and update x position of center tile.
    * @param {number} newWidth New view width, in pixels.
@@ -87,6 +92,32 @@ const view = {
    */
   get centerY() {
     return this.center[1];
+  },
+  /**
+   * Get x position of cursor, in pixels.
+   */
+  get cursorX() {
+    return this.cursor[0];
+  },
+  /**
+   * Set x position of cursor, in pixels.
+   * @param {number} x New x position of cursor, in pixels.
+   */
+  set cursorX(x) {
+    this.cursor[0] = x;
+  },
+  /**
+   * Get y position of cursor, in pixels.
+   */
+  get cursorY() {
+    return this.cursor[1];
+  },
+  /**
+   * Set y position of cursor, in pixels.
+   * @param {number} y New y position of cursor, in pixels.
+   */
+  set cursorY(y) {
+    this.cursor[1] = y;
   },
 };
 
