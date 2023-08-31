@@ -58,6 +58,7 @@ const view = {
   h: 0,
   /**
    * Absolute position of center tile. Represented as [x,y] in pixels.
+   * @type {[number, number]}
    */
   center: [0, 0],
   /**
