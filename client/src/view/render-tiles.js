@@ -159,7 +159,7 @@ const renderTile = (index) => {
  * @returns Newly created DOM element showing the next tile to be placed.
  */
 const renderNextTile = () => {
-  const [background, foreground] = nextTile;
+  const [background, foreground] = [nextTile.background, nextTile.foreground];
   const width = tileSize.getWidth;
 
   // create container //

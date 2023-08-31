@@ -46,10 +46,42 @@ const boardData = {};
 const availableIndexes = new Set();
 
 /**
- * Array representing next tile to be placed.
- * @type {[("light" | "medium" | "dark"), foregroundHash]}
+ * Object containing next tile and its getters and setters.
+ * @type {Object}
  */
-const nextTile = [];
+const nextTile = {
+  /**
+   * Next tile to be placed.
+   * @type {[("light" | "medium" | "dark"), foregroundHash]}
+   */
+  tile: [],
+  /**
+   * Get background of next tile.
+   */
+  get background() {
+    return this.tile[0];
+  },
+  /**
+   * Set background of next tile.
+   * @param {"light" | "medium" | "dark"} background Background of next tile.
+   */
+  set background(background) {
+    this.tile[0] = background;
+  },
+  /**
+   * Get foreground of next tile.
+   */
+  get foreground() {
+    return this.tile[1];
+  },
+  /**
+   * Set foreground of next tile.
+   * @param {foregroundHash} foreground Foreground of next tile.
+   */
+  set foreground(foreground) {
+    this.tile[1] = foreground;
+  },
+};
 
 /**
  * Updates the gameboard, given a new tile to place.
@@ -76,13 +108,4 @@ const addTileData = (index, background, foreground) => {
   return [index, [...newAvailables]];
 };
 
-/**
- * Updates next tile to be placed.
- * @param {[("light" | "medium" | "dark"), foregroundHash]} tile
- */
-const updateNextTile = (tile) => {
-  nextTile[0] = tile[0];
-  nextTile[1] = tile[1];
-};
-
-export { addTileData, availableIndexes, boardData, nextTile, updateNextTile };
+export { addTileData, availableIndexes, boardData, nextTile };

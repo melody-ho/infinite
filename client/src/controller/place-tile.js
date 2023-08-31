@@ -1,5 +1,5 @@
 /// Imports ///
-import { addTileData, updateNextTile } from "../model/board-data";
+import { addTileData, nextTile } from "../model/board-data";
 import generateNextTile from "./generate-next-tile";
 import { renderNextTile, renderTile } from "../view/render-tiles";
 
@@ -37,15 +37,15 @@ const placeTile = (index, tile) => {
 
   // proceed to next move //
   // generate next tile
-  updateNextTile(generateNextTile());
+  [nextTile.background, nextTile.foreground] = generateNextTile();
   // remove previous if present
   const previous = document.querySelector(".next-tile");
   if (previous !== null) {
     previous.remove();
   }
   // render and append next tile
-  const nextTile = renderNextTile();
-  board.appendChild(nextTile);
+  const newNext = renderNextTile();
+  board.appendChild(newNext);
 };
 
 export default placeTile;

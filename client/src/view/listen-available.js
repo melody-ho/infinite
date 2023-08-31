@@ -11,8 +11,8 @@ import validatePlace from "../controller/validate-place";
 const listenAvailable = (element) => {
   element.addEventListener("click", (e) => {
     const index = e.target.parentElement.getAttribute("index");
-    if (validatePlace(index, nextTile[1])) {
-      placeTile(index, nextTile);
+    if (validatePlace(index, nextTile.foreground)) {
+      placeTile(index, [nextTile.background, nextTile.foreground]);
     }
   });
 };
