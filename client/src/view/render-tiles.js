@@ -3,7 +3,7 @@
 import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
-import listenAvailable from "../view/listen-available";
+import listenAvailable from "./listen-available";
 import { pan, tileSize, view } from "../model/view-data";
 
 // assets
