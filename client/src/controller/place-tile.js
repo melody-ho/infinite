@@ -1,7 +1,7 @@
 /// Imports ///
 import { addTileData, nextTile } from "../model/board-data";
-import generateNextTile from "./generate-next-tile";
 import { renderNextTile, renderTile } from "../view/render-tiles";
+import generateNextTile from "./generate-next-tile";
 
 /**
  * @typedef {string} foregroundHash Tile edge types from top going clockwise, represented as a string of six numbers.

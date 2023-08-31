@@ -1,10 +1,10 @@
 /// Imports ///
 // modules
 import { boardData, nextTile } from "../model/board-data";
+import { pan, tileSize, view } from "../model/view-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 import listenAvailable from "./listen-available";
-import { pan, tileSize, view } from "../model/view-data";
 
 // assets
 function importAll(r) {

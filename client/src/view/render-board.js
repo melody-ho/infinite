@@ -1,6 +1,6 @@
 /// Imports ///
-import { boardData } from "../model/board-data";
 import { renderNextTile, renderTile } from "./render-tiles";
+import { boardData } from "../model/board-data";
 import { pan } from "../model/view-data";
 
 /// Private ///
