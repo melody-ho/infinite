@@ -42,7 +42,7 @@ const tileSize = {
 };
 
 /**
- * Object containing view width, view height, view center, cursor position and their getters and setters.
+ * Object containing view width, view height, view center, next tile position and their getters and setters.
  * @type {Object}
  */
 const view = {
@@ -62,10 +62,10 @@ const view = {
    */
   center: [0, 0],
   /**
-   * Last logged cursor position. Represented as [x,y] in pixels.
+   * Last logged absolute position of next tile. Represented as [x,y] in pixels.
    * @type {[number, number]}
    */
-  cursor: [0, 0],
+  nextTile: [0, 0],
   /**
    * Set new view width and update x position of center tile.
    * @param {number} newWidth New view width, in pixels.
@@ -95,30 +95,30 @@ const view = {
     return this.center[1];
   },
   /**
-   * Get x position of cursor, in pixels.
+   * Get x position of next tile, in pixels.
    */
-  get cursorX() {
-    return this.cursor[0];
+  get nextTileX() {
+    return this.nextTile[0];
   },
   /**
-   * Set x position of cursor, in pixels.
-   * @param {number} x New x position of cursor, in pixels.
+   * Set x position of next tile, in pixels.
+   * @param {number} x New x position of next tile, in pixels.
    */
-  set cursorX(x) {
-    this.cursor[0] = x;
+  set nextTileX(x) {
+    this.nextTile[0] = x;
   },
   /**
-   * Get y position of cursor, in pixels.
+   * Get y position of next tile, in pixels.
    */
-  get cursorY() {
-    return this.cursor[1];
+  get nextTileY() {
+    return this.nextTile[1];
   },
   /**
-   * Set y position of cursor, in pixels.
-   * @param {number} y New y position of cursor, in pixels.
+   * Set y position of next tile, in pixels.
+   * @param {number} y New y position of next tile, in pixels.
    */
-  set cursorY(y) {
-    this.cursor[1] = y;
+  set nextTileY(y) {
+    this.nextTile[1] = y;
   },
 };
 

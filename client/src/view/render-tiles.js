@@ -167,8 +167,8 @@ const renderNextTile = () => {
   tile.classList.add("next-tile");
   tile.style.width = `${width}px`;
   tile.style.height = `${width}px`;
-  tile.style.left = `${view.cursorX - width / 2}px`;
-  tile.style.top = `${view.cursorY - width / 2}px`;
+  tile.style.left = `${view.nextTileX}px`;
+  tile.style.top = `${view.nextTileY}px`;
 
   // fill container //
   // render background
@@ -193,13 +193,31 @@ const renderNextTile = () => {
   // add listener for following cursor //
   const board = document.querySelector(".board");
   board.addEventListener("mousemove", (e) => {
-    tile.style.left = `${e.clientX - width / 2}px`;
-    tile.style.top = `${e.clientY - width / 2}px`;
-    view.cursorX = e.clientX;
-    view.cursorY = e.clientY;
+    view.nextTileX = e.clientX - board.offsetLeft - width / 2;
+    view.nextTileY = e.clientY - board.offsetTop - width / 2;
+    tile.style.left = `${view.nextTileX}px`;
+    tile.style.top = `${view.nextTileY}px`;
   });
 
   return tile;
 };
 
-export { renderNextTile, renderTile };
+/**
+ * Initializes position at which to render next tile.
+ */
+const initializeNextTilePosition = async () => {
+  await new Promise((resolve) => {
+    document.addEventListener(
+      "mouseover",
+      (e) => {
+        const board = document.querySelector(".board");
+        view.nextTileX = e.clientX - board.offsetLeft - tileSize.getWidth / 2;
+        view.nextTileY = e.clientY - board.offsetTop - tileSize.getWidth / 2;
+        resolve();
+      },
+      { once: true },
+    );
+  });
+};
+
+export { initializeNextTilePosition, renderNextTile, renderTile };
