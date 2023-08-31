@@ -9,10 +9,6 @@ import { tileSize } from "../model/view-data";
  */
 const MIN_TILES = 8;
 /**
- * tile width  = tile size * SIZE_FACTOR
- */
-const SIZE_FACTOR = 4;
-/**
  * Amount to increment size by when zooming in.
  */
 const ZOOM_FACTOR = 12 / 10;
@@ -33,7 +29,9 @@ const rerender = () => {
 const initializeZoom = () => {
   const board = document.querySelector(".board");
   tileSize.set =
-    Math.min(board.offsetWidth, board.offsetHeight) / MIN_TILES / SIZE_FACTOR;
+    Math.min(board.offsetWidth, board.offsetHeight) /
+    MIN_TILES /
+    tileSize.sizeFactor;
 };
 
 /**

@@ -2,14 +2,6 @@
 import { addTileData, updateNextTile } from "../model/board-data";
 import generateNextTile from "./generate-next-tile";
 import { renderNextTile, renderTile } from "../view/render-tiles";
-import { viewCenter } from "../model/view-data";
-
-/// Constants ///
-/**
- * Index of tile at view center.
- * @type {string} "x,y"
- */
-const CENTER_INDEX = "0,0";
 
 /**
  * @typedef {string} foregroundHash Tile edge types from top going clockwise, represented as a string of six numbers.
@@ -29,7 +21,7 @@ const placeTile = (index, tile) => {
 
   // place new filled tile //
   const oldTile = document.querySelector(`[index="${filled}"]`);
-  const newTile = renderTile(filled, CENTER_INDEX, viewCenter);
+  const newTile = renderTile(filled);
   if (oldTile !== null) {
     // replace previous available tile
     oldTile.parentNode.replaceChild(newTile, oldTile);
@@ -39,7 +31,7 @@ const placeTile = (index, tile) => {
 
   // place new available tiles //
   for (let i = 0; i < newAvailables.length; i += 1) {
-    const newAvailable = renderTile(newAvailables[i], CENTER_INDEX, viewCenter);
+    const newAvailable = renderTile(newAvailables[i]);
     board.appendChild(newAvailable);
   }
 

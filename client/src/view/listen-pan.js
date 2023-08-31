@@ -1,5 +1,5 @@
 /// Imports ///
-import { getPanLimits, panValue, panX, panY } from "../model/view-data";
+import { pan } from "../model/view-data";
 
 /// Constants ///
 /**
@@ -9,20 +9,20 @@ const SPEED = 20;
 
 /// Private ///
 /**
- * Pans view.
+ * Applies pan data to DOM.
  */
-const pan = () => {
+const applyPan = () => {
   const board = document.querySelector(".board");
-  board.style.setProperty("--move-x", `${panValue[0]}px`);
-  board.style.setProperty("--move-y", `${panValue[1]}px`);
+  board.style.setProperty("--move-x", `${pan.x}px`);
+  board.style.setProperty("--move-y", `${pan.y}px`);
 };
 
 /**
  * Increase x of pan value if within bounds.
  */
 const increaseX = () => {
-  if (panValue[0] < getPanLimits().xMax) {
-    panX(SPEED);
+  if (pan.x < pan.getLimits().xMax) {
+    pan.changeX(SPEED);
   }
 };
 
@@ -30,8 +30,8 @@ const increaseX = () => {
  * Decrease x of pan value if within bounds.
  */
 const decreaseX = () => {
-  if (panValue[0] > getPanLimits().xMin) {
-    panX(-SPEED);
+  if (pan.x > pan.getLimits().xMin) {
+    pan.changeX(-SPEED);
   }
 };
 
@@ -39,8 +39,8 @@ const decreaseX = () => {
  * Increase y of pan value if within bounds.
  */
 const increaseY = () => {
-  if (panValue[1] < getPanLimits().yMax) {
-    panY(SPEED);
+  if (pan.y < pan.getLimits().yMax) {
+    pan.changeY(SPEED);
   }
 };
 
@@ -48,8 +48,8 @@ const increaseY = () => {
  * Decrease y of pan value if within bounds.
  */
 const decreaseY = () => {
-  if (panValue[1] > getPanLimits().yMin) {
-    panY(-SPEED);
+  if (pan.y > pan.getLimits().yMin) {
+    pan.changeY(-SPEED);
   }
 };
 
@@ -59,7 +59,7 @@ const decreaseY = () => {
  */
 const listenPan = () => {
   // initalize css variables
-  pan();
+  applyPan();
 
   // log keys pressed
   let d = false;
@@ -82,39 +82,39 @@ const listenPan = () => {
     }
     if (d && !a && !w && !s) {
       decreaseX();
-      pan();
+      applyPan();
     }
     if (a && !d && !w && !s) {
       increaseX();
-      pan();
+      applyPan();
     }
     if (w && !d && !a && !s) {
       increaseY();
-      pan();
+      applyPan();
     }
     if (s && !d && !a && !w) {
       decreaseY();
-      pan();
+      applyPan();
     }
     if (d && w && !a && !s) {
       decreaseX();
       increaseY();
-      pan();
+      applyPan();
     }
     if (d && s && !a && !w) {
       decreaseX();
       decreaseY();
-      pan();
+      applyPan();
     }
     if (a && w && !d && !s) {
       increaseX();
       increaseY();
-      pan();
+      applyPan();
     }
     if (a && s && !d && !w) {
       increaseX();
       decreaseY();
-      pan();
+      applyPan();
     }
   });
 

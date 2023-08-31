@@ -1,30 +1,16 @@
 /// Imports ///
 import clearBoardView from "./clear-board-view";
 import renderBoard from "./render-board";
-import { setViewCenter, setViewSize, tileSize } from "../model/view-data";
-
-/// Constants ///
-/**
- * tile width  = SIZE * SIZE_FACTOR
- */
-const SIZE_FACTOR = 4;
+import { view } from "../model/view-data";
 
 /// Private ///
 /**
  * Updates view center and view size in view data.
  */
 const updateViewData = () => {
-  const size = tileSize.get;
-  const center = [];
   const board = document.querySelector(".board");
-
-  const viewWidth = board.offsetWidth;
-  const viewHeight = board.offsetHeight;
-  center[0] = viewWidth / 2 - (size * SIZE_FACTOR) / 2;
-  center[1] = viewHeight / 2 - (size * SIZE_FACTOR) / 2;
-
-  setViewSize([viewWidth, viewHeight]);
-  setViewCenter(center);
+  view.width = board.offsetWidth;
+  view.height = board.offsetHeight;
 };
 
 /**

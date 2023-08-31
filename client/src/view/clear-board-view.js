@@ -1,17 +1,16 @@
 /// Imports ///
-import { resetPanBounds } from "../model/view-data";
+import { pan } from "../model/view-data";
 
 /// Public ///
 /**
  * Clears board view and relevant view data.
  */
 const clearBoardView = () => {
-  const board = document.querySelector(".board");
-
   // reset pan bounds
-  resetPanBounds();
+  pan.resetBounds();
 
   // remove elements
+  const board = document.querySelector(".board");
   while (board.firstChild) {
     board.removeChild(board.firstChild);
   }

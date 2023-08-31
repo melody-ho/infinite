@@ -4,7 +4,7 @@ import { boardData, nextTile } from "../model/board-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 import listenAvailable from "../view/listen-available";
-import { panBounds, tileSize } from "../model/view-data";
+import { pan, tileSize, view } from "../model/view-data";
 
 // assets
 function importAll(r) {
@@ -24,42 +24,40 @@ const foregrounds = importAll(
 
 /// Constants ///
 /**
- * tile width  = tile size * SIZE_FACTOR
+ * Index of tile at view center.
+ * @type {string} "x,y"
  */
-const SIZE_FACTOR = 4;
+const CENTER_INDEX = "0,0";
 
 /// Private ///
 /**
  * Get view coordinates of a tile.
  * @param {string} self Index of tile itself.
- * @param {string} center Index of tile at view center.
  * @returns {[number, number]} View coordinates of the tile as [x,y].
  */
-const getCoordinates = (self, center) => {
+const getCoordinates = (self) => {
   const [sx, sy] = convertIndex(self);
-  const [cx, cy] = convertIndex(center);
+  const [cx, cy] = convertIndex(CENTER_INDEX);
   return [sx - cx, sy - cy];
 };
 
 /**
  * Calculates absolute position of a tile.
  * @param {string} self Index of tile itself.
- * @param {string} center Index of tile at view center.
- * @param {[number, number]} viewCenter Absolute position of tile at view center, represented as [left, bottom] (in pixels).
  * @returns {[number, number]} Absolute position represented as [left, bottom] (in pixels).
  */
-const getViewPosition = (self, center, viewCenter) => {
+const getViewPosition = (self) => {
   const size = tileSize.get;
-  const coordinates = getCoordinates(self, center);
+  const coordinates = getCoordinates(self);
 
   const xDistance = 3 * size * coordinates[0];
-  const left = viewCenter[0] + xDistance;
+  const left = view.centerX + xDistance;
 
   const yDistance =
     coordinates[0] % 2 === 0
       ? Math.sqrt(3) * size * 2 * coordinates[1]
       : Math.sqrt(3) * size * (2 * coordinates[1] + 1);
-  const bottom = viewCenter[1] + yDistance;
+  const bottom = view.centerY + yDistance;
 
   return [left, bottom];
 };
@@ -71,28 +69,28 @@ const getViewPosition = (self, center, viewCenter) => {
 const updatePanBounds = (viewPosition) => {
   const [left, bottom] = [...viewPosition];
 
-  if (panBounds.top === null) {
-    panBounds.top = bottom;
-  } else if (bottom > panBounds.top) {
-    panBounds.top = bottom;
+  if (pan.bounds.top === null) {
+    pan.bounds.top = bottom;
+  } else if (bottom > pan.bounds.top) {
+    pan.bounds.top = bottom;
   }
 
-  if (panBounds.right === null) {
-    panBounds.right = left;
-  } else if (left > panBounds.right) {
-    panBounds.right = left;
+  if (pan.bounds.right === null) {
+    pan.bounds.right = left;
+  } else if (left > pan.bounds.right) {
+    pan.bounds.right = left;
   }
 
-  if (panBounds.bottom === null) {
-    panBounds.bottom = bottom;
-  } else if (bottom < panBounds.bottom) {
-    panBounds.bottom = bottom;
+  if (pan.bounds.bottom === null) {
+    pan.bounds.bottom = bottom;
+  } else if (bottom < pan.bounds.bottom) {
+    pan.bounds.bottom = bottom;
   }
 
-  if (panBounds.left === null) {
-    panBounds.left = left;
-  } else if (left < panBounds.left) {
-    panBounds.left = left;
+  if (pan.bounds.left === null) {
+    pan.bounds.left = left;
+  } else if (left < pan.bounds.left) {
+    pan.bounds.left = left;
   }
 };
 
@@ -100,16 +98,13 @@ const updatePanBounds = (viewPosition) => {
 /**
  * Creates DOM element for a specified tile.
  * @param {string} index Index of tile to render.
- * @param {string} centerTile Index of tile at view center.
- * @param {[number, number]} viewCenter Absolute position of tile at view center, represented as [left, bottom] (in pixels).
  * @returns {Object} Newly created DOM element for the tile specified.
  */
-const renderTile = (index, centerTile, viewCenter) => {
+const renderTile = (index) => {
   // get information needed //
   const tileData = boardData[index];
-  const position = getViewPosition(index, centerTile, viewCenter);
-  const size = tileSize.get;
-  const width = size * SIZE_FACTOR;
+  const position = getViewPosition(index);
+  const width = tileSize.getWidth;
 
   // update pan boundaries //
   updatePanBounds(position);
@@ -165,8 +160,7 @@ const renderTile = (index, centerTile, viewCenter) => {
  */
 const renderNextTile = () => {
   const [background, foreground] = nextTile;
-  const size = tileSize.get;
-  const width = size * SIZE_FACTOR;
+  const width = tileSize.getWidth;
 
   // create container //
   const tile = document.createElement("div");

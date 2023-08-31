@@ -1,32 +1,25 @@
 /// Imports ///
 import { boardData } from "../model/board-data";
 import { renderNextTile, renderTile } from "./render-tiles";
-import { getPanLimits, panValue, viewCenter } from "../model/view-data";
-
-/// Constants ///
-/**
- * Index of tile at view center.
- * @type {string} "x,y"
- */
-const CENTER_INDEX = "0,0";
+import { pan } from "../model/view-data";
 
 /// Private ///
 /**
  * Adjusts pan values to reflect new pan limits.
  */
 const setNewPan = () => {
-  const { xMin, xMax, yMin, yMax } = getPanLimits();
-  if (panValue[0] < xMin) {
-    panValue[0] = xMin;
+  const { xMin, xMax, yMin, yMax } = pan.getLimits();
+  if (pan.x < xMin) {
+    pan.x = xMin;
   }
-  if (panValue[0] > xMax) {
-    panValue[0] = xMax;
+  if (pan.x > xMax) {
+    pan.x = xMax;
   }
-  if (panValue[1] < yMin) {
-    panValue[1] = yMin;
+  if (pan.y < yMin) {
+    pan.y = yMin;
   }
-  if (panValue[1] > yMax) {
-    panValue[1] = yMax;
+  if (pan.y > yMax) {
+    pan.y = yMax;
   }
 };
 
@@ -40,7 +33,7 @@ const renderBoard = () => {
   // render tiles in gameboard
   const indexes = Object.keys(boardData);
   for (let i = 0; i < indexes.length; i += 1) {
-    const tile = renderTile(indexes[i], CENTER_INDEX, viewCenter);
+    const tile = renderTile(indexes[i]);
     board.appendChild(tile);
   }
 
@@ -50,8 +43,8 @@ const renderBoard = () => {
 
   // adjust panned distances to new view
   setNewPan();
-  board.style.setProperty("--move-x", `${panValue[0]}px`);
-  board.style.setProperty("--move-y", `${panValue[1]}px`);
+  board.style.setProperty("--move-x", `${pan.x}px`);
+  board.style.setProperty("--move-y", `${pan.y}px`);
 };
 
 export default renderBoard;
