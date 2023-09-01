@@ -1,5 +1,13 @@
+:root {
+  --background-color: rgb(15, 15, 15);
+}
+
+.body {
+  background-color: var(--background-color);
+}
+
 .board {
-  background-color: rgb(0, 0, 0);
+  background-color: var(--background-color);
   height: 98vh;
   margin: auto;
   overflow: clip;
