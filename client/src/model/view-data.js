@@ -174,6 +174,13 @@ const pan = {
    */
   changeX(change) {
     this.distance[0] += change;
+    const { xMin, xMax } = this.getLimits();
+    if (this.distance[0] > xMax) {
+      this.distance[0] = xMax;
+    }
+    if (this.distance[0] < xMin) {
+      this.distance[0] = xMin;
+    }
   },
   /**
    * Change y distance by a certain amount.
@@ -181,6 +188,13 @@ const pan = {
    */
   changeY(change) {
     this.distance[1] += change;
+    const { yMin, yMax } = this.getLimits();
+    if (this.distance[1] > yMax) {
+      this.distance[1] = yMax;
+    }
+    if (this.distance[1] < yMin) {
+      this.distance[1] = yMin;
+    }
   },
   /**
    * Resets pan values to 0.

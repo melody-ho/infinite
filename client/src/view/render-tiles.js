@@ -94,6 +94,42 @@ const updatePanBounds = (viewPosition) => {
   }
 };
 
+/**
+ * Creates DOM element showing next tile to be placed.
+ * @returns {Element} Newly created DOM element of next tile to be placed.
+ */
+const renderNextTile = () => {
+  const [background, foreground] = [nextTile.background, nextTile.foreground];
+
+  // create container //
+  const tile = document.createElement("div");
+  tile.classList.add("next-tile");
+  tile.style.width = `${tileSize.getWidth}px`;
+  tile.style.height = `${tileSize.getWidth}px`;
+
+  // fill container //
+  // render background
+  const back = document.createElement("img");
+  back.classList.add("next-tile__background");
+  back.setAttribute("src", backgrounds[`${background}.svg`]);
+  // render foreground
+  if (foreground !== "000000") {
+    const front = document.createElement("img");
+    front.classList.add("next-tile__foreground");
+    const [frontSvg, rotation] = getForeground(foreground);
+    front.setAttribute("src", foregrounds[`${frontSvg}.svg`]);
+    front.style.transform = `rotate(${rotation}deg)`;
+    front.setAttribute("rotation", `${rotation}`);
+    // appending in this order ensures foreground is shown in front of background
+    tile.appendChild(front);
+    tile.insertBefore(back, front);
+  } else {
+    tile.appendChild(back);
+  }
+
+  return tile;
+};
+
 /// Public ///
 /**
  * Creates DOM element for a specified tile.
@@ -155,46 +191,34 @@ const renderTile = (index) => {
 };
 
 /**
- * Creates DOM element showing the next tile to be placed.
- * @returns Newly created DOM element showing the next tile to be placed.
+ * Renders a next tile that remains static, shown on devices without hover.
+ * @returns {Element} DOM element of next tile to be placed, for devices without hover.
  */
-const renderNextTile = () => {
-  const [background, foreground] = [nextTile.background, nextTile.foreground];
-  const width = tileSize.getWidth;
+const renderStaticNext = () => {
+  const tile = renderNextTile();
+  tile.classList.add("next-tile--static");
 
-  // create container //
-  const tile = document.createElement("div");
-  tile.classList.add("next-tile");
-  tile.style.width = `${width}px`;
-  tile.style.height = `${width}px`;
+  return tile;
+};
+
+/**
+ * Renders a next tile that follows the cursor, shown on hover devices.
+ * @returns {Element} DOM element of next tile to be placed, for devices with hover.
+ */
+const renderTrackingNext = () => {
+  const tile = renderNextTile();
+  tile.classList.add("hover");
+  tile.classList.add("next-tile--tracking");
+
+  // place at current cursor position
   tile.style.left = `${view.nextTileX}px`;
   tile.style.top = `${view.nextTileY}px`;
 
-  // fill container //
-  // render background
-  const back = document.createElement("img");
-  back.classList.add("next-tile__background");
-  back.setAttribute("src", backgrounds[`${background}.svg`]);
-  // render foreground
-  if (foreground !== "000000") {
-    const front = document.createElement("img");
-    front.classList.add("next-tile__foreground");
-    const [frontSvg, rotation] = getForeground(foreground);
-    front.setAttribute("src", foregrounds[`${frontSvg}.svg`]);
-    front.style.transform = `rotate(${rotation}deg)`;
-    front.setAttribute("rotation", `${rotation}`);
-    // appending in this order ensures foreground is shown in front of background
-    tile.appendChild(front);
-    tile.insertBefore(back, front);
-  } else {
-    tile.appendChild(back);
-  }
-
-  // add listener for following cursor //
+  // add listener to follow cursor
   const board = document.querySelector(".board");
   board.addEventListener("mousemove", (e) => {
-    view.nextTileX = e.clientX - board.offsetLeft - width / 2;
-    view.nextTileY = e.clientY - board.offsetTop - width / 2;
+    view.nextTileX = e.clientX - board.offsetLeft - tileSize.getWidth / 2;
+    view.nextTileY = e.clientY - board.offsetTop - tileSize.getWidth / 2;
     tile.style.left = `${view.nextTileX}px`;
     tile.style.top = `${view.nextTileY}px`;
   });
@@ -217,7 +241,16 @@ const initializeNextTilePosition = async () => {
       },
       { once: true },
     );
+    // bypass getting cursor position for devices without hover
+    setTimeout(() => {
+      resolve();
+    }, 100);
   });
 };
 
-export { initializeNextTilePosition, renderNextTile, renderTile };
+export {
+  initializeNextTilePosition,
+  renderStaticNext,
+  renderTile,
+  renderTrackingNext,
+};

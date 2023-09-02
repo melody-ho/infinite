@@ -3,7 +3,7 @@ import { pan } from "../model/view-data";
 
 /// Constants ///
 /**
- * Speed of pan, in pixels.
+ * Speed of pan with keyboard, in pixels.
  */
 const SPEED = 20;
 
@@ -58,10 +58,11 @@ const decreaseY = () => {
  * Adds listeners for view panning.
  */
 const listenPan = () => {
-  // initalize css variables
+  // initialize css variables //
   applyPan();
 
-  // log keys pressed
+  // keyboard controls //
+  // track keys pressed
   let d = false;
   let a = false;
   let w = false;
@@ -132,6 +133,45 @@ const listenPan = () => {
       s = false;
     }
   });
+
+  // touch controls //
+  const board = document.querySelector(".board");
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let deltaX = 0;
+  let deltaY = 0;
+
+  board.addEventListener("touchstart", (startEvent) => {
+    startEvent.preventDefault();
+    touchStartX = startEvent.touches[0].clientX;
+    touchStartY = startEvent.touches[0].clientY;
+    board.addEventListener("touchmove", handleMove);
+    board.addEventListener("touchend", handleEnd);
+  });
+
+  const handleMove = (moveEvent) => {
+    const { xMin, xMax, yMin, yMax } = pan.getLimits();
+    deltaX = moveEvent.touches[0].clientX - touchStartX;
+    deltaY = moveEvent.touches[0].clientY - touchStartY;
+
+    if ((deltaX > 0 && pan.x < xMax) || (deltaX < 0 && pan.x > xMin)) {
+      pan.changeX(deltaX);
+      touchStartX = moveEvent.touches[0].clientX;
+    }
+    if ((deltaY > 0 && pan.y < yMax) || (deltaY < 0 && pan.y > yMin)) {
+      pan.changeY(deltaY);
+      touchStartY = moveEvent.touches[0].clientY;
+    }
+
+    applyPan();
+  };
+
+  const handleEnd = () => {
+    deltaX = 0;
+    deltaY = 0;
+    board.removeEventListener("touchmove", handleMove);
+    board.removeEventListener("touchend", handleEnd);
+  };
 };
 
 export default listenPan;

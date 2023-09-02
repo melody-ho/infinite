@@ -1,5 +1,9 @@
 /// Imports ///
-import { renderNextTile, renderTile } from "./render-tiles";
+import {
+  renderStaticNext,
+  renderTile,
+  renderTrackingNext,
+} from "./render-tiles";
 import { boardData } from "../model/board-data";
 import { pan } from "../model/view-data";
 
@@ -38,8 +42,13 @@ const renderBoard = () => {
   }
 
   // render next tile
-  const nextTile = renderNextTile();
-  board.appendChild(nextTile);
+  // for hover devices
+  const hoverNext = renderTrackingNext();
+  board.appendChild(hoverNext);
+  // for devices without hover
+  const staticNext = renderStaticNext();
+  const prevStaticNext = document.querySelector(".next-tile--static");
+  prevStaticNext.replaceWith(staticNext);
 
   // adjust panned distances to new view
   setNewPan();

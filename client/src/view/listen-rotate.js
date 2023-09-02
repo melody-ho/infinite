@@ -25,13 +25,17 @@ const ROTATE_RIGHT = 1;
  * Handles rotating next tile counterclockwise.
  */
 const handleRotateLeft = () => {
-  const tile = document.querySelector(".next-tile");
-  const rotation =
-    (MAX_ROTATES + (Number(tile.getAttribute("rotation")) + ROTATE_LEFT)) %
-    MAX_ROTATES;
-  tile.setAttribute("rotation", `${rotation}`);
+  const tiles = document.querySelectorAll(".next-tile");
+  for (let i = 0; i < tiles.length; i += 1) {
+    const tile = tiles[i];
 
-  tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
+    const rotation =
+      (MAX_ROTATES + (Number(tile.getAttribute("rotation")) + ROTATE_LEFT)) %
+      MAX_ROTATES;
+    tile.setAttribute("rotation", `${rotation}`);
+    tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
+  }
+
   rotateTile("left");
 };
 
@@ -39,12 +43,16 @@ const handleRotateLeft = () => {
  * Handles rotating next tile clockwise.
  */
 const handleRotateRight = () => {
-  const tile = document.querySelector(".next-tile");
-  const rotation =
-    (Number(tile.getAttribute("rotation")) + ROTATE_RIGHT) % MAX_ROTATES;
-  tile.setAttribute("rotation", `${rotation}`);
+  const tiles = document.querySelectorAll(".next-tile");
+  for (let i = 0; i < tiles.length; i += 1) {
+    const tile = tiles[i];
 
-  tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
+    const rotation =
+      (Number(tile.getAttribute("rotation")) + ROTATE_RIGHT) % MAX_ROTATES;
+    tile.setAttribute("rotation", `${rotation}`);
+    tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
+  }
+
   rotateTile("right");
 };
 
@@ -53,6 +61,7 @@ const handleRotateRight = () => {
  * Adds listener for rotating next tile.
  */
 const listenRotate = () => {
+  // keyboard controls //
   document.addEventListener("keydown", (e) => {
     if (e.key === "q") {
       handleRotateLeft();
@@ -61,6 +70,10 @@ const listenRotate = () => {
       handleRotateRight();
     }
   });
+
+  // touch control //
+  const rotateRightBtn = document.querySelector(".next-tile-interface__rotate-right-btn");
+  rotateRightBtn.addEventListener("click", handleRotateRight);
 };
 
 export default listenRotate;

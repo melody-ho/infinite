@@ -1,6 +1,10 @@
 /// Imports ///
 import { addTileData, nextTile } from "../model/board-data";
-import { renderNextTile, renderTile } from "../view/render-tiles";
+import {
+  renderStaticNext,
+  renderTile,
+  renderTrackingNext,
+} from "../view/render-tiles";
 import generateNextTile from "./generate-next-tile";
 
 /**
@@ -38,14 +42,21 @@ const placeTile = (index, tile) => {
   // proceed to next move //
   // generate next tile
   [nextTile.background, nextTile.foreground] = generateNextTile();
+  // render next tile
+  // for hover devices: next tile tracks cursor
   // remove previous if present
-  const previous = document.querySelector(".next-tile");
-  if (previous !== null) {
-    previous.remove();
+  const prevTracking = document.querySelector(".next-tile--tracking");
+  if (prevTracking !== null) {
+    prevTracking.remove();
   }
-  // render and append next tile
-  const newNext = renderNextTile();
-  board.appendChild(newNext);
+  // render and append
+  const trackingNext = renderTrackingNext();
+  board.appendChild(trackingNext);
+  // for devices without hover: next tile is static
+  // render and replace
+  const prevStaticNext = document.querySelector(".next-tile--static");
+  const staticNext = renderStaticNext();
+  prevStaticNext.replaceWith(staticNext);
 };
 
 export default placeTile;

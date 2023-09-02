@@ -5,7 +5,11 @@ import { tileSize } from "../model/view-data";
 
 /// Constants ///
 /**
- * Default minimum number of tiles on shorter dimension.
+ * Minimum size of tiles at default.
+ */
+const MIN_SIZE = 20;
+/**
+ * Minimum number of tiles on shorter dimension at default.
  */
 const MIN_TILES = 8;
 /**
@@ -24,14 +28,20 @@ const rerender = () => {
 
 /// Public ///
 /**
- * Initializes zoom to default level.
+ * Initializes zoom to default level and updates relevant data.
  */
 const initializeZoom = () => {
   const board = document.querySelector(".board");
-  tileSize.set =
+  tileSize.set = Math.max(
     Math.min(board.offsetWidth, board.offsetHeight) /
-    MIN_TILES /
-    tileSize.sizeFactor;
+      MIN_TILES /
+      tileSize.sizeFactor,
+    MIN_SIZE,
+  );
+
+  // update CSS variable for devices without hover
+  const nextInterface = document.querySelector(".no-hover");
+  nextInterface.style.setProperty("--tile-width", `${tileSize.getWidth}px`);
 };
 
 /**
