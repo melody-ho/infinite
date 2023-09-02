@@ -39,7 +39,7 @@ const initializeZoom = () => {
     MIN_SIZE,
   );
 
-  // update CSS variable for devices without hover
+  // initialize tile width in CSS for devices without hover
   const nextInterface = document.querySelector(".no-hover");
   nextInterface.style.setProperty("--tile-width", `${tileSize.getWidth}px`);
 };
