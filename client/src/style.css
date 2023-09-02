@@ -25,7 +25,6 @@
 
 .tile {
   transform: translate(var(--move-x), var(--move-y));
-  transition: transform 0.2s ease;
 }
 
 @media (hover: none) {

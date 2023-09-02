@@ -27,48 +27,75 @@ const handlePlaceAttempt = (target) => {
  * @param {Element} element DOM element to add listener to.
  */
 const listenAvailable = (element) => {
-  // mouse event //
-  element.addEventListener("click", (e) => {
-    handlePlaceAttempt(e.target);
-  });
+  // mouse controls //
+  let clickTarget = null;
+  let clickStartX = 0;
+  let clickStartY = 0;
+  let clickDeltaX = 0;
+  let clickDeltaY = 0;
 
-  // touch event //
-  let target = null;
-  let startT = null;
-  let startX = 0;
-  let startY = 0;
-  let deltaX = 0;
-  let deltaY = 0;
-
-  const handleStart = (startEvent) => {
-    target = startEvent.target;
-    startT = new Date();
-    startX = startEvent.touches[0].clientX;
-    startY = startEvent.touches[0].clientY;
-    window.addEventListener("touchmove", handleMove);
-    window.addEventListener("touchend", handleEnd);
+  const handleClickStart = (startEvent) => {
+    clickTarget = startEvent.target;
+    clickStartX = startEvent.clientX;
+    clickStartY = startEvent.clientY;
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleClickEnd);
   };
 
-  const handleMove = (moveEvent) => {
-    deltaX = moveEvent.touches[0].clientX - startX;
-    deltaY = moveEvent.touches[0].clientY - startY;
+  const handleMouseMove = (moveEvent) => {
+    clickDeltaX = moveEvent.clientX - clickStartX;
+    clickDeltaY = moveEvent.clientY - clickStartY;
   };
 
-  const handleEnd = () => {
-    const lapse = new Date() - startT;
+  const handleClickEnd = () => {
+    if (clickDeltaX === 0 && clickDeltaY === 0) {
+      handlePlaceAttempt(clickTarget);
+    }
+    clickDeltaX = 0;
+    clickDeltaY = 0;
+    window.removeEventListener("mousemove", handleMouseMove);
+    window.removeEventListener("mouseup", handleClickEnd);
+  };
+
+  element.addEventListener("mousedown", handleClickStart);
+
+  // touch controls //
+  let touchTarget = null;
+  let touchStartT = null;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchDeltaX = 0;
+  let touchDeltaY = 0;
+
+  const handleTouchStart = (startEvent) => {
+    touchTarget = startEvent.target;
+    touchStartT = new Date();
+    touchStartX = startEvent.touches[0].clientX;
+    touchStartY = startEvent.touches[0].clientY;
+    window.addEventListener("touchmove", handleTouchMove);
+    window.addEventListener("touchend", handleTouchEnd);
+  };
+
+  const handleTouchMove = (moveEvent) => {
+    touchDeltaX = moveEvent.touches[0].clientX - touchStartX;
+    touchDeltaY = moveEvent.touches[0].clientY - touchStartY;
+  };
+
+  const handleTouchEnd = () => {
+    const lapse = new Date() - touchStartT;
     if (
       lapse > TIME_THRESHOLD &&
-      (Math.abs(deltaX) <= 0 || Math.abs(deltaY) <= 0)
+      (Math.abs(touchDeltaX) <= 0 || Math.abs(touchDeltaY) <= 0)
     ) {
-      handlePlaceAttempt(target);
+      handlePlaceAttempt(touchTarget);
     }
-    deltaX = 0;
-    deltaY = 0;
-    window.removeEventListener("touchmove", handleMove);
-    window.removeEventListener("touchend", handleEnd);
+    touchDeltaX = 0;
+    touchDeltaY = 0;
+    window.removeEventListener("touchmove", handleTouchMove);
+    window.removeEventListener("touchend", handleTouchEnd);
   };
 
-  element.addEventListener("touchstart", handleStart);
+  element.addEventListener("touchstart", handleTouchStart);
 };
 
 export default listenAvailable;

@@ -134,43 +134,93 @@ const listenPan = () => {
     }
   });
 
-  // touch controls //
   const board = document.querySelector(".board");
+
+  // mouse contorls //
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragDeltaX = 0;
+  let dragDeltaY = 0;
+
+  board.addEventListener("dragstart", (e) => {
+    e.preventDefault();
+  });
+
+  board.addEventListener("mousedown", (startEvent) => {
+    dragStartX = startEvent.clientX;
+    dragStartY = startEvent.clientY;
+    board.addEventListener("mousemove", handleDrag);
+    board.addEventListener("mouseup", handleDragEnd);
+    board.addEventListener("mouseleave", handleDragEnd);
+  });
+
+  const handleDrag = (dragEvent) => {
+    const { xMin, xMax, yMin, yMax } = pan.getLimits();
+    dragDeltaX = dragEvent.clientX - dragStartX;
+    dragDeltaY = dragEvent.clientY - dragStartY;
+
+    if ((dragDeltaX > 0 && pan.x < xMax) || (dragDeltaX < 0 && pan.x > xMin)) {
+      pan.changeX(dragDeltaX);
+      dragStartX = dragEvent.clientX;
+    }
+    if ((dragDeltaY > 0 && pan.y < yMax) || (dragDeltaY < 0 && pan.y > yMin)) {
+      pan.changeY(dragDeltaY);
+      dragStartY = dragEvent.clientY;
+    }
+
+    applyPan();
+  };
+
+  const handleDragEnd = () => {
+    dragDeltaX = 0;
+    dragDeltaY = 0;
+    board.removeEventListener("mousemove", handleDrag);
+    board.removeEventListener("mouseup", handleDragEnd);
+    board.removeEventListener("mouseleave", handleDragEnd);
+  };
+
+  // touch controls //
   let touchStartX = 0;
   let touchStartY = 0;
-  let deltaX = 0;
-  let deltaY = 0;
+  let touchDeltaX = 0;
+  let touchDeltaY = 0;
 
   board.addEventListener("touchstart", (startEvent) => {
     startEvent.preventDefault();
     touchStartX = startEvent.touches[0].clientX;
     touchStartY = startEvent.touches[0].clientY;
-    board.addEventListener("touchmove", handleMove);
-    board.addEventListener("touchend", handleEnd);
+    board.addEventListener("touchmove", handleTouchMove);
+    board.addEventListener("touchend", handleTouchEnd);
   });
 
-  const handleMove = (moveEvent) => {
+  const handleTouchMove = (moveEvent) => {
     const { xMin, xMax, yMin, yMax } = pan.getLimits();
-    deltaX = moveEvent.touches[0].clientX - touchStartX;
-    deltaY = moveEvent.touches[0].clientY - touchStartY;
+    touchDeltaX = moveEvent.touches[0].clientX - touchStartX;
+    touchDeltaY = moveEvent.touches[0].clientY - touchStartY;
 
-    if ((deltaX > 0 && pan.x < xMax) || (deltaX < 0 && pan.x > xMin)) {
-      pan.changeX(deltaX);
+    if (
+      (touchDeltaX > 0 && pan.x < xMax) ||
+      (touchDeltaX < 0 && pan.x > xMin)
+    ) {
+      pan.changeX(touchDeltaX);
       touchStartX = moveEvent.touches[0].clientX;
     }
-    if ((deltaY > 0 && pan.y < yMax) || (deltaY < 0 && pan.y > yMin)) {
-      pan.changeY(deltaY);
+    if (
+      (touchDeltaY > 0 && pan.y < yMax) ||
+      (touchDeltaY < 0 && pan.y > yMin)
+    ) {
+      pan.changeY(touchDeltaY);
       touchStartY = moveEvent.touches[0].clientY;
     }
 
     applyPan();
   };
 
-  const handleEnd = () => {
-    deltaX = 0;
-    deltaY = 0;
-    board.removeEventListener("touchmove", handleMove);
-    board.removeEventListener("touchend", handleEnd);
+  const handleTouchEnd = () => {
+    touchDeltaX = 0;
+    touchDeltaY = 0;
+    board.removeEventListener("touchmove", handleTouchMove);
+    board.removeEventListener("touchend", handleTouchEnd);
   };
 };
 
