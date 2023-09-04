@@ -5,11 +5,13 @@
 }
 
 .board {
+  -webkit-user-select: none;
   height: 98vh;
   left: 1vw;
   overflow: clip;
   position: absolute;
   top: 1vh;
+  user-select: none;
   width: 98vw;
 }
 
