@@ -25,6 +25,7 @@
 
 .tile {
   transform: translate(var(--move-x), var(--move-y));
+  transition: var(--keyboard-pan-transition);
 }
 
 @media (hover: none) {

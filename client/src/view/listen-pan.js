@@ -1,11 +1,19 @@
 /// Imports ///
-import { pan } from "../model/view-data";
+import { pan, tileSize } from "../model/view-data";
 
 /// Constants ///
 /**
- * Speed of pan with keyboard, in pixels.
+ * Interval between steps when panning with keyboard, in ms.
  */
-const SPEED = 20;
+const KEYBOARD_PAN_INTERVAL = 100;
+/**
+ * Distance to move for each step when panning with keyboard, represented as number of tile sizes (tile size = tile width / 4).
+ */
+const KEYBOARD_STEP_SIZE = 2;
+/**
+ * Duration of transition for each step when panning with keyboard, in ms.
+ */
+const KEYBOARD_TRANSITION_DURATION = 200;
 
 /// Private ///
 /**
@@ -22,7 +30,7 @@ const applyPan = () => {
  */
 const increaseX = () => {
   if (pan.x < pan.getLimits().xMax) {
-    pan.changeX(SPEED);
+    pan.changeX(tileSize.get * KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -31,7 +39,7 @@ const increaseX = () => {
  */
 const decreaseX = () => {
   if (pan.x > pan.getLimits().xMin) {
-    pan.changeX(-SPEED);
+    pan.changeX(tileSize.get * -KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -40,7 +48,7 @@ const decreaseX = () => {
  */
 const increaseY = () => {
   if (pan.y < pan.getLimits().yMax) {
-    pan.changeY(SPEED);
+    pan.changeY(tileSize.get * KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -49,7 +57,7 @@ const increaseY = () => {
  */
 const decreaseY = () => {
   if (pan.y > pan.getLimits().yMin) {
-    pan.changeY(-SPEED);
+    pan.changeY(tileSize.get * -KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -68,19 +76,8 @@ const listenPan = () => {
   let w = false;
   let s = false;
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "d") {
-      d = true;
-    }
-    if (e.key === "a") {
-      a = true;
-    }
-    if (e.key === "w") {
-      w = true;
-    }
-    if (e.key === "s") {
-      s = true;
-    }
+  // pan according to keys currently pressed
+  const move = () => {
     if (d && !a && !w && !s) {
       decreaseX();
       applyPan();
@@ -117,9 +114,36 @@ const listenPan = () => {
       decreaseY();
       applyPan();
     }
+  };
+  let currentInterval = setInterval(move, KEYBOARD_PAN_INTERVAL);
+
+  document.addEventListener("keydown", (e) => {
+    // update keys pressed
+    if (e.key === "d") {
+      d = true;
+    }
+    if (e.key === "a") {
+      a = true;
+    }
+    if (e.key === "w") {
+      w = true;
+    }
+    if (e.key === "s") {
+      s = true;
+    }
+
+    // add keyboard pan transition
+    if (d || a || w || s) {
+      const board = document.querySelector(".board");
+      board.style.setProperty(
+        "--keyboard-pan-transition",
+        `transform ${KEYBOARD_TRANSITION_DURATION / 1000}s`,
+      );
+    }
   });
 
   document.addEventListener("keyup", (e) => {
+    // update keys pressed
     if (e.key === "d") {
       d = false;
     }
@@ -131,6 +155,20 @@ const listenPan = () => {
     }
     if (e.key === "s") {
       s = false;
+    }
+
+    if (!d && !a && !w && !s) {
+      // reset move interval to prevent delay in response
+      clearInterval(currentInterval);
+      currentInterval = setInterval(move, KEYBOARD_PAN_INTERVAL);
+
+      // remove keyboard transition if no keys are pressed when transition ends
+      setTimeout(() => {
+        if (!d && !a && !w && !s) {
+          const board = document.querySelector(".board");
+          board.style.setProperty("--keyboard-pan-transition", "none");
+        }
+      }, KEYBOARD_TRANSITION_DURATION);
     }
   });
 
