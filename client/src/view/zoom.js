@@ -7,11 +7,15 @@ import { tileSize } from "../model/view-data";
 /**
  * Minimum size of tiles at default.
  */
-const MIN_SIZE = 20;
+const MIN_DEFAULT_SIZE = 20;
 /**
  * Minimum number of tiles on shorter dimension at default.
  */
-const MIN_TILES = 8;
+const MIN_DEFAULT_TILES = 8;
+/**
+ * Minimum number of tiles on shorter dimension with zoom.
+ */
+const MIN_ZOOM_TILES = 1;
 /**
  * Amount to increment size by when zooming in.
  */
@@ -34,9 +38,9 @@ const initializeZoom = () => {
   const board = document.querySelector(".board");
   tileSize.set = Math.max(
     Math.min(board.offsetWidth, board.offsetHeight) /
-      MIN_TILES /
+      MIN_DEFAULT_TILES /
       tileSize.sizeFactor,
-    MIN_SIZE,
+    MIN_DEFAULT_SIZE,
   );
 
   // initialize tile width in CSS for devices without hover
@@ -45,12 +49,32 @@ const initializeZoom = () => {
 };
 
 /**
+ * Adjusts zoom when window is resized.
+ */
+const adjustZoom = () => {
+  const board = document.querySelector(".board");
+
+  const maxSize =
+    Math.min(board.offsetWidth, board.offsetHeight) /
+    MIN_ZOOM_TILES /
+    tileSize.sizeFactor;
+
+  tileSize.set = tileSize.get > maxSize ? maxSize : tileSize.get;
+};
+
+/**
  * Adds listener for zooming.
  */
 const listenZoom = () => {
   document.addEventListener("keydown", (e) => {
     if (e.key === "z") {
-      tileSize.set = tileSize.get * ZOOM_FACTOR;
+      const newSize = tileSize.get * ZOOM_FACTOR;
+      const board = document.querySelector(".board");
+      const maxSize =
+        Math.min(board.offsetWidth, board.offsetHeight) /
+        MIN_ZOOM_TILES /
+        tileSize.sizeFactor;
+      tileSize.set = newSize > maxSize ? maxSize : newSize;
       rerender();
     }
     if (e.key === "x") {
@@ -60,4 +84,4 @@ const listenZoom = () => {
   });
 };
 
-export { initializeZoom, listenZoom };
+export { adjustZoom, initializeZoom, listenZoom };

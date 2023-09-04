@@ -4,6 +4,7 @@ import {
   renderTile,
   renderTrackingNext,
 } from "./render-tiles";
+import { adjustZoom } from "./zoom";
 import { boardData } from "../model/board-data";
 import { pan } from "../model/view-data";
 
@@ -34,14 +35,17 @@ const setNewPan = () => {
 const renderBoard = () => {
   const board = document.querySelector(".board");
 
-  // render tiles in gameboard
+  // adjust tile size to new viewport size //
+  adjustZoom();
+
+  // render tiles in gameboard //
   const indexes = Object.keys(boardData);
   for (let i = 0; i < indexes.length; i += 1) {
     const tile = renderTile(indexes[i]);
     board.appendChild(tile);
   }
 
-  // render next tile
+  // render next tile //
   // for hover devices
   const hoverNext = renderTrackingNext();
   board.appendChild(hoverNext);
@@ -50,7 +54,7 @@ const renderBoard = () => {
   const prevStaticNext = document.querySelector(".next-tile--static");
   prevStaticNext.replaceWith(staticNext);
 
-  // adjust panned distances to new view
+  // adjust panned distances to new view //
   setNewPan();
   board.style.setProperty("--move-x", `${pan.x}px`);
   board.style.setProperty("--move-y", `${pan.y}px`);
