@@ -38,6 +38,32 @@ const rerender = () => {
   renderBoard();
 };
 
+/**
+ * Handles zooming in.
+ */
+const zoomIn = () => {
+  const newSize = tileSize.get * ZOOM_FACTOR;
+  const board = document.querySelector(".board");
+  const maxSize =
+    Math.min(board.offsetWidth, board.offsetHeight) /
+    MIN_ZOOM_TILES /
+    tileSize.sizeFactor;
+  tileSize.set = newSize > maxSize ? maxSize : newSize;
+
+  updateCSS();
+  rerender();
+};
+
+/**
+ * Handles zooming out.
+ */
+const zoomOut = () => {
+  tileSize.set = tileSize.get / ZOOM_FACTOR;
+
+  updateCSS();
+  rerender();
+};
+
 /// Public ///
 /**
  * Initializes zoom to default level and updates relevant data.
@@ -74,26 +100,17 @@ const adjustZoom = () => {
  * Adds listener for zooming.
  */
 const listenZoom = () => {
+  // keyboard controls //
   document.addEventListener("keydown", (e) => {
-    if (e.key === "z") {
-      const newSize = tileSize.get * ZOOM_FACTOR;
-      const board = document.querySelector(".board");
-      const maxSize =
-        Math.min(board.offsetWidth, board.offsetHeight) /
-        MIN_ZOOM_TILES /
-        tileSize.sizeFactor;
-      tileSize.set = newSize > maxSize ? maxSize : newSize;
-
-      updateCSS();
-      rerender();
-    }
-    if (e.key === "x") {
-      tileSize.set = tileSize.get / ZOOM_FACTOR;
-
-      updateCSS();
-      rerender();
-    }
+    if (e.key === "z") zoomIn();
+    if (e.key === "x") zoomOut();
   });
+
+  // button controls //
+  const zoomInBtn = document.querySelector(".zoom-interface__zoom-in-btn");
+  zoomInBtn.addEventListener("click", zoomIn);
+  const zoomOutBtn = document.querySelector(".zoom-interface__zoom-out-btn");
+  zoomOutBtn.addEventListener("click", zoomOut);
 };
 
 export { adjustZoom, initializeZoom, listenZoom };
