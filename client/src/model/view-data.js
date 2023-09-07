@@ -218,8 +218,8 @@ const pan = {
   getLimits() {
     const xMin = -this.bounds.right;
     const xMax = view.w - this.bounds.left - tileSize.getWidth;
-    const yMin = -(view.h - this.bounds.bottom - tileSize.getWidth);
-    const yMax = this.bounds.top;
+    const yMin = -this.bounds.bottom;
+    const yMax = view.h - this.bounds.top - tileSize.getWidth;
 
     return { xMin, xMax, yMin, yMax };
   },

@@ -44,7 +44,7 @@ const getCoordinates = (self) => {
 /**
  * Calculates absolute position of a tile.
  * @param {string} self Index of tile itself.
- * @returns {[number, number]} Absolute position represented as [left, bottom] (in pixels).
+ * @returns {[number, number]} Absolute position represented as [left, top] (in pixels).
  */
 const getViewPosition = (self) => {
   const size = tileSize.get;
@@ -57,22 +57,22 @@ const getViewPosition = (self) => {
     coordinates[0] % 2 === 0
       ? Math.sqrt(3) * size * 2 * coordinates[1]
       : Math.sqrt(3) * size * (2 * coordinates[1] + 1);
-  const bottom = view.centerY + yDistance;
+  const top = view.centerY - yDistance;
 
-  return [left, bottom];
+  return [left, top];
 };
 
 /**
  * Updates pan boundaries when a new tile is rendered.
- * @param {[number, number]} viewPosition Absolute position of the new tile, represented as [left, bottom] (in pixels).
+ * @param {[number, number]} viewPosition Absolute position of the new tile, represented as [left, top] (in pixels).
  */
 const updatePanBounds = (viewPosition) => {
-  const [left, bottom] = [...viewPosition];
+  const [left, top] = [...viewPosition];
 
   if (pan.bounds.top === null) {
-    pan.bounds.top = bottom;
-  } else if (bottom > pan.bounds.top) {
-    pan.bounds.top = bottom;
+    pan.bounds.top = top;
+  } else if (top < pan.bounds.top) {
+    pan.bounds.top = top;
   }
 
   if (pan.bounds.right === null) {
@@ -82,9 +82,9 @@ const updatePanBounds = (viewPosition) => {
   }
 
   if (pan.bounds.bottom === null) {
-    pan.bounds.bottom = bottom;
-  } else if (bottom < pan.bounds.bottom) {
-    pan.bounds.bottom = bottom;
+    pan.bounds.bottom = top;
+  } else if (top > pan.bounds.bottom) {
+    pan.bounds.bottom = top;
   }
 
   if (pan.bounds.left === null) {
@@ -152,7 +152,7 @@ const renderTile = (index) => {
   newTile.style.width = `${width}px`;
   newTile.style.height = `${width}px`;
   newTile.style.left = `${position[0]}px`;
-  newTile.style.bottom = `${position[1]}px`;
+  newTile.style.top = `${position[1]}px`;
 
   // fill container //
   if (tileData.status === "available") {
