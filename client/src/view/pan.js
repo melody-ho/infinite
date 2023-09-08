@@ -1,5 +1,5 @@
 /// Imports ///
-import { pan, tileSize } from "../model/view-data";
+import { pan, tiles, zoom } from "../model/view-data";
 
 /// Constants ///
 /**
@@ -7,13 +7,17 @@ import { pan, tileSize } from "../model/view-data";
  */
 const KEYBOARD_PAN_INTERVAL = 100;
 /**
- * Distance to move for each step when panning with keyboard, represented as number of tile sizes (tile size = tile width / 4).
+ * Distance to move for each step when panning with keyboard, represented as number of tile sizes (tile size = tile width / size factor).
  */
 const KEYBOARD_STEP_SIZE = 2;
 /**
+ * Pan transition property.
+ */
+const PAN_TRANSITION = "transform 0.2s ease";
+/**
  * Duration of transition for each step when panning with keyboard, in ms.
  */
-const KEYBOARD_TRANSITION_DURATION = 200;
+const PAN_TRANSITION_DURATION = 200;
 
 /// Private ///
 /**
@@ -30,7 +34,7 @@ const applyPan = () => {
  */
 const increaseX = () => {
   if (pan.x < pan.getLimits().xMax) {
-    pan.changeX(tileSize.get * KEYBOARD_STEP_SIZE);
+    pan.changeX(tiles.size * KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -39,7 +43,7 @@ const increaseX = () => {
  */
 const decreaseX = () => {
   if (pan.x > pan.getLimits().xMin) {
-    pan.changeX(tileSize.get * -KEYBOARD_STEP_SIZE);
+    pan.changeX(tiles.size * -KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -48,7 +52,7 @@ const decreaseX = () => {
  */
 const increaseY = () => {
   if (pan.y < pan.getLimits().yMax) {
-    pan.changeY(tileSize.get * KEYBOARD_STEP_SIZE);
+    pan.changeY(tiles.size * KEYBOARD_STEP_SIZE);
   }
 };
 
@@ -57,11 +61,56 @@ const increaseY = () => {
  */
 const decreaseY = () => {
   if (pan.y > pan.getLimits().yMin) {
-    pan.changeY(tileSize.get * -KEYBOARD_STEP_SIZE);
+    pan.changeY(tiles.size * zoom.factor * -KEYBOARD_STEP_SIZE);
   }
 };
 
+/**
+ * Tracks active panning with keyboard.
+ */
+const keys = {
+  d: false,
+  a: false,
+  w: false,
+  s: false,
+};
+
 /// Public ///
+/**
+ * Updates pan bounds and adjusts pan position to reflect new limits.
+ */
+const updatePan = () => {
+  // update pan bounds //
+  const { xMin, xMax, yMin, yMax } = pan.getLimits();
+
+  if (pan.x < xMin) {
+    pan.x = xMin;
+  }
+  if (pan.x > xMax) {
+    pan.x = xMax;
+  }
+  if (pan.y < yMin) {
+    pan.y = yMin;
+  }
+  if (pan.y > yMax) {
+    pan.y = yMax;
+  }
+
+  // adjust pan position //
+  const board = document.querySelector(".board");
+  // add transition to smoothen adjustment
+  board.style.setProperty("--pan-transition", PAN_TRANSITION);
+  // adjust pan position
+  board.style.setProperty("--move-x", `${pan.x}px`);
+  board.style.setProperty("--move-y", `${pan.y}px`);
+  // remove transition if no active keyboard panning when adjustment ends
+  setTimeout(() => {
+    if (!keys.d && !keys.a && !keys.w && !keys.s) {
+      board.style.setProperty("--pan-transition", "none");
+    }
+  }, PAN_TRANSITION_DURATION);
+};
+
 /**
  * Adds listeners for view panning.
  */
@@ -70,46 +119,40 @@ const listenPan = () => {
   applyPan();
 
   // keyboard controls //
-  // track keys pressed
-  let d = false;
-  let a = false;
-  let w = false;
-  let s = false;
-
   // pan according to keys currently pressed
   const move = () => {
-    if (d && !a && !w && !s) {
+    if (keys.d && !keys.a && !keys.w && !keys.s) {
       decreaseX();
       applyPan();
     }
-    if (a && !d && !w && !s) {
+    if (keys.a && !keys.d && !keys.w && !keys.s) {
       increaseX();
       applyPan();
     }
-    if (w && !d && !a && !s) {
+    if (keys.w && !keys.d && !keys.a && !keys.s) {
       increaseY();
       applyPan();
     }
-    if (s && !d && !a && !w) {
+    if (keys.s && !keys.d && !keys.a && !keys.w) {
       decreaseY();
       applyPan();
     }
-    if (d && w && !a && !s) {
+    if (keys.d && keys.w && !keys.a && !keys.s) {
       decreaseX();
       increaseY();
       applyPan();
     }
-    if (d && s && !a && !w) {
+    if (keys.d && keys.s && !keys.a && !keys.w) {
       decreaseX();
       decreaseY();
       applyPan();
     }
-    if (a && w && !d && !s) {
+    if (keys.a && keys.w && !keys.d && !keys.s) {
       increaseX();
       increaseY();
       applyPan();
     }
-    if (a && s && !d && !w) {
+    if (keys.a && keys.s && !keys.d && !keys.w) {
       increaseX();
       decreaseY();
       applyPan();
@@ -120,76 +163,72 @@ const listenPan = () => {
   document.addEventListener("keydown", (e) => {
     // update keys pressed
     if (e.key === "d") {
-      d = true;
+      keys.d = true;
     }
     if (e.key === "a") {
-      a = true;
+      keys.a = true;
     }
     if (e.key === "w") {
-      w = true;
+      keys.w = true;
     }
     if (e.key === "s") {
-      s = true;
+      keys.s = true;
     }
 
     // add keyboard pan transition
-    if (d || a || w || s) {
+    if (keys.d || keys.a || keys.w || keys.s) {
       const board = document.querySelector(".board");
-      board.style.setProperty(
-        "--keyboard-pan-transition",
-        `transform ${KEYBOARD_TRANSITION_DURATION / 1000}s`,
-      );
+      board.style.setProperty("--pan-transition", PAN_TRANSITION);
     }
   });
 
   document.addEventListener("keyup", (e) => {
     // update keys pressed
     if (e.key === "d") {
-      d = false;
+      keys.d = false;
     }
     if (e.key === "a") {
-      a = false;
+      keys.a = false;
     }
     if (e.key === "w") {
-      w = false;
+      keys.w = false;
     }
     if (e.key === "s") {
-      s = false;
+      keys.s = false;
     }
 
-    if (!d && !a && !w && !s) {
+    if (!keys.d && !keys.a && !keys.w && !keys.s) {
       // reset move interval to prevent delay in response
       clearInterval(currentInterval);
       currentInterval = setInterval(move, KEYBOARD_PAN_INTERVAL);
 
       // remove keyboard transition if no keys are pressed when transition ends
       setTimeout(() => {
-        if (!d && !a && !w && !s) {
+        if (!keys.d && !keys.a && !keys.w && !keys.s) {
           const board = document.querySelector(".board");
-          board.style.setProperty("--keyboard-pan-transition", "none");
+          board.style.setProperty("--pan-transition", "none");
         }
-      }, KEYBOARD_TRANSITION_DURATION);
+      }, PAN_TRANSITION_DURATION);
     }
   });
 
-  const board = document.querySelector(".board");
-
+  const viewBox = document.querySelector(".view-box");
   // mouse contorls //
   let dragStartX = 0;
   let dragStartY = 0;
   let dragDeltaX = 0;
   let dragDeltaY = 0;
 
-  board.addEventListener("dragstart", (e) => {
+  viewBox.addEventListener("dragstart", (e) => {
     e.preventDefault();
   });
 
-  board.addEventListener("mousedown", (startEvent) => {
+  viewBox.addEventListener("mousedown", (startEvent) => {
     dragStartX = startEvent.clientX;
     dragStartY = startEvent.clientY;
-    board.addEventListener("mousemove", handleDrag);
-    board.addEventListener("mouseup", handleDragEnd);
-    board.addEventListener("mouseleave", handleDragEnd);
+    viewBox.addEventListener("mousemove", handleDrag);
+    viewBox.addEventListener("mouseup", handleDragEnd);
+    viewBox.addEventListener("mouseleave", handleDragEnd);
   });
 
   const handleDrag = (dragEvent) => {
@@ -212,9 +251,9 @@ const listenPan = () => {
   const handleDragEnd = () => {
     dragDeltaX = 0;
     dragDeltaY = 0;
-    board.removeEventListener("mousemove", handleDrag);
-    board.removeEventListener("mouseup", handleDragEnd);
-    board.removeEventListener("mouseleave", handleDragEnd);
+    viewBox.removeEventListener("mousemove", handleDrag);
+    viewBox.removeEventListener("mouseup", handleDragEnd);
+    viewBox.removeEventListener("mouseleave", handleDragEnd);
   };
 
   // touch controls //
@@ -223,12 +262,12 @@ const listenPan = () => {
   let touchDeltaX = 0;
   let touchDeltaY = 0;
 
-  board.addEventListener("touchstart", (startEvent) => {
+  viewBox.addEventListener("touchstart", (startEvent) => {
     startEvent.preventDefault();
     touchStartX = startEvent.touches[0].clientX;
     touchStartY = startEvent.touches[0].clientY;
-    board.addEventListener("touchmove", handleTouchMove);
-    board.addEventListener("touchend", handleTouchEnd);
+    viewBox.addEventListener("touchmove", handleTouchMove);
+    viewBox.addEventListener("touchend", handleTouchEnd);
   });
 
   const handleTouchMove = (moveEvent) => {
@@ -257,9 +296,9 @@ const listenPan = () => {
   const handleTouchEnd = () => {
     touchDeltaX = 0;
     touchDeltaY = 0;
-    board.removeEventListener("touchmove", handleTouchMove);
-    board.removeEventListener("touchend", handleTouchEnd);
+    viewBox.removeEventListener("touchmove", handleTouchMove);
+    viewBox.removeEventListener("touchend", handleTouchEnd);
   };
 };
 
-export default listenPan;
+export { listenPan, updatePan };

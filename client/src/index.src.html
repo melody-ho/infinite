@@ -7,16 +7,18 @@
   </head>
   <body class="body">
     <main class="main">
-      <div class="no-hover next-tile-interface">
-        <div class="next-tile-interface__preview">
-          <div class="next-tile next-tile--static"></div>
+      <div class="next-tile-interface__zoom-wrapper zoom-wrapper">
+        <div class="no-hover next-tile-interface">
+          <div class="next-tile-interface__preview">
+            <div class="next-tile next-tile--static"></div>
+          </div>
+          <input
+            alt="rotate right"
+            class="next-tile-interface__rotate-right-btn"
+            src="./assets/ui/rotate-right.svg"
+            type="image"
+          />
         </div>
-        <input
-          alt="rotate right"
-          class="next-tile-interface__rotate-right-btn"
-          src="./assets/ui/rotate-right.svg"
-          type="image"
-        />
       </div>
       <div class="zoom-interface">
         <input
@@ -32,7 +34,14 @@
           type="image"
         />
       </div>
-      <div class="board"></div>
+      <div class="view-box">
+        <div class="board__zoom-wrapper zoom-wrapper">
+          <div class="board"></div>
+        </div>
+        <div class="next-tile__zoom-wrapper--tracking zoom-wrapper">
+          <div class="next-tile--tracking"></div>
+        </div>
+      </div>
     </main>
   </body>
 </html>

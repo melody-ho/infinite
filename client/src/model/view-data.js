@@ -1,48 +1,73 @@
-/// Constants ///
-/**
- * tile width  = tile size * SIZE_FACTOR
- */
-const SIZE_FACTOR = 4;
-
 /// Public ///
 /**
- * Object containing tile size, tile width and their getters and setters.
+ * Object containing information for rendering tiles..
  * @type {Object}
  */
-const tileSize = {
+const tiles = {
   /**
    * Tile size, in pixels. (width = size * size factor)
    * @type {?number}
    */
-  size: null,
+  tileSize: null,
   /**
    * Size factor. (width = size * size factor)
    * @const {number}
    */
-  sizeFactor: SIZE_FACTOR,
+  sizeFactor: 4,
+  /**
+   * Last logged absolute position of next tile that tracks cursor. Represented as [left offset, top offset] in pixels.
+   * @type {[number, number]}
+   */
+  trackingNextTile: [0, 0],
   /**
    * Get tile size, in pixels. (width = size * size factor)
    */
-  get get() {
-    return this.size;
+  get size() {
+    return this.tileSize;
+  },
+  /**
+   * Set tile size.
+   * @param {number} newSize New tile size, in pixels. (width = size * size factor)
+   */
+  set size(newSize) {
+    this.tileSize = newSize;
   },
   /**
    * Get tile width, in pixels. (width = size * size factor)
    */
-  get getWidth() {
+  get width() {
     return this.size * this.sizeFactor;
   },
   /**
-   * Set tile size.
-   * @param {number} newSize New size of tiles, in pixels. (width = size * 4)
+   * Get left offset of next tile that tracks cursor, in pixels.
    */
-  set set(newSize) {
-    this.size = newSize;
+  get trackingLeft() {
+    return this.trackingNextTile[0];
+  },
+  /**
+   * Set left offset of next tile that tracks cursor, in pixels.
+   * @param {number} newOffset New left offset of next tile, in pixels.
+   */
+  set trackingLeft(newOffset) {
+    this.trackingNextTile[0] = newOffset;
+  },
+  /**
+   * Get top offset of next tile that tracks cursor, in pixels.
+   */
+  get trackingTop() {
+    return this.trackingNextTile[1];
+  },
+  /**
+   * Set top offset of next tile that tracks cursor, in pixels.
+   * @param {number} newOffset New top offset of next tile, in pixels.
+   */
+  set trackingTop(newOffset) {
+    this.trackingNextTile[1] = newOffset;
   },
 };
 
 /**
- * Object containing view width, view height, view center, next tile position and their getters and setters.
+ * Object containing view width, view height, view center, and their getters and setters.
  * @type {Object}
  */
 const view = {
@@ -57,68 +82,79 @@ const view = {
    */
   h: 0,
   /**
-   * Absolute position of center tile. Represented as [x,y] in pixels.
-   * @type {[number, number]}
+   * Get view width, in pixels.
    */
-  center: [0, 0],
+  get width() {
+    return this.w;
+  },
   /**
-   * Last logged absolute position of next tile. Represented as [x,y] in pixels.
-   * @type {[number, number]}
-   */
-  nextTile: [0, 0],
-  /**
-   * Set new view width and update x position of center tile.
+   * Set new view width.
    * @param {number} newWidth New view width, in pixels.
    */
   set width(newWidth) {
     this.w = newWidth;
-    this.center[0] = newWidth / 2 - tileSize.getWidth / 2;
   },
   /**
-   * Set new view height and update y position of center tile.
+   * Get view height, in pixels.
+   */
+  get height() {
+    return this.h;
+  },
+  /**
+   * Set new view height.
    * @param {number} newHeight New view height, in pixels.
    */
   set height(newHeight) {
     this.h = newHeight;
-    this.center[1] = newHeight / 2 - tileSize.getWidth / 2;
   },
   /**
-   * Get x position of center tile, in pixels.
+   * Get left offset of center tile, in pixels.
    */
-  get centerX() {
-    return this.center[0];
+  get centerLeft() {
+    return (this.w - tiles.width) / 2;
   },
   /**
-   * Get y position of center tile, in pixels.
+   * Get top offset of center tile, in pixels.
    */
-  get centerY() {
-    return this.center[1];
+  get centerTop() {
+    return (this.h - tiles.width) / 2;
   },
   /**
-   * Get x position of next tile, in pixels.
+   * Get calculated left offset of center tile, in pixels.
    */
-  get nextTileX() {
-    return this.nextTile[0];
+  get calculatedCenterLeft() {
+    return (this.w - tiles.width * zoom.factor) / 2;
   },
   /**
-   * Set x position of next tile, in pixels.
-   * @param {number} x New x position of next tile, in pixels.
+   * Get calculated top offset of center tile, in pixels.
    */
-  set nextTileX(x) {
-    this.nextTile[0] = x;
+  get calculatedCenterTop() {
+    return (this.h - tiles.width * zoom.factor) / 2;
+  },
+};
+
+/**
+ * Object containing zoom factor and its getters and setters.
+ * @type {Object}
+ */
+const zoom = {
+  /**
+   * Level of zoom.
+   * @type {number}
+   */
+  zoomFactor: 1,
+  /**
+   * Get zoom factor.
+   */
+  get factor() {
+    return this.zoomFactor;
   },
   /**
-   * Get y position of next tile, in pixels.
+   * Set new zoom factor.
+   * @param {number} newZoom New zoom factor.
    */
-  get nextTileY() {
-    return this.nextTile[1];
-  },
-  /**
-   * Set y position of next tile, in pixels.
-   * @param {number} y New y position of next tile, in pixels.
-   */
-  set nextTileY(y) {
-    this.nextTile[1] = y;
+  set factor(newZoom) {
+    this.zoomFactor = newZoom;
   },
 };
 
@@ -216,13 +252,27 @@ const pan = {
    * @returns {{xMin: number, xMax: number, yMin: number, yMax: number}}
    */
   getLimits() {
-    const xMin = -this.bounds.right;
-    const xMax = view.w - this.bounds.left - tileSize.getWidth;
-    const yMin = -this.bounds.bottom;
-    const yMax = view.h - this.bounds.top - tileSize.getWidth;
+    const xMin =
+      (-view.calculatedCenterLeft -
+        this.bounds.right * tiles.size * zoom.factor) /
+      zoom.factor;
+    const xMax =
+      (view.w -
+        view.calculatedCenterLeft -
+        (this.bounds.left * tiles.size + tiles.width) * zoom.factor) /
+      zoom.factor;
+    const yMin =
+      (-view.calculatedCenterTop +
+        this.bounds.bottom * tiles.size * zoom.factor) /
+      zoom.factor;
+    const yMax =
+      (view.h -
+        view.calculatedCenterTop +
+        (this.bounds.top * tiles.size - tiles.width) * zoom.factor) /
+      zoom.factor;
 
     return { xMin, xMax, yMin, yMax };
   },
 };
 
-export { pan, tileSize, view };
+export { pan, tiles, view, zoom };

@@ -43,17 +43,11 @@ const placeTile = (index, tile) => {
   // generate next tile
   [nextTile.background, nextTile.foreground] = generateNextTile();
   // render next tile
-  // for hover devices: next tile tracks cursor
-  // remove previous if present
+  // for devices with hover: next tile tracks cursor
   const prevTracking = document.querySelector(".next-tile--tracking");
-  if (prevTracking !== null) {
-    prevTracking.remove();
-  }
-  // render and append
   const trackingNext = renderTrackingNext();
-  board.appendChild(trackingNext);
+  prevTracking.replaceWith(trackingNext);
   // for devices without hover: next tile is static
-  // render and replace
   const prevStaticNext = document.querySelector(".next-tile--static");
   const staticNext = renderStaticNext();
   prevStaticNext.replaceWith(staticNext);

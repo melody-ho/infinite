@@ -1,7 +1,7 @@
 /// Imports ///
 // modules
 import { boardData, nextTile } from "../model/board-data";
-import { pan, tileSize, view } from "../model/view-data";
+import { pan, tiles, view } from "../model/view-data";
 import convertIndex from "../utils/convert-index";
 import getForeground from "./get-foreground";
 import listenAvailable from "./listen-available";
@@ -22,75 +22,54 @@ const foregrounds = importAll(
   require.context("../assets/tiles/foreground", false, /\.+/),
 );
 
-/// Constants ///
-/**
- * Index of tile at view center.
- * @type {string} "x,y"
- */
-const CENTER_INDEX = "0,0";
-
 /// Private ///
 /**
- * Get view coordinates of a tile.
+ * Calculates distance factor of a tile.
  * @param {string} self Index of tile itself.
- * @returns {[number, number]} View coordinates of the tile as [x,y].
+ * @returns {[number, number]} Distance factors, represented as [x, y]. (distance from center = tile size * distance factor)
  */
-const getCoordinates = (self) => {
-  const [sx, sy] = convertIndex(self);
-  const [cx, cy] = convertIndex(CENTER_INDEX);
-  return [sx - cx, sy - cy];
-};
+const getDistanceFactors = (self) => {
+  const coordinates = convertIndex(self);
 
-/**
- * Calculates absolute position of a tile.
- * @param {string} self Index of tile itself.
- * @returns {[number, number]} Absolute position represented as [left, top] (in pixels).
- */
-const getViewPosition = (self) => {
-  const size = tileSize.get;
-  const coordinates = getCoordinates(self);
-
-  const xDistance = 3 * size * coordinates[0];
-  const left = view.centerX + xDistance;
+  const xDistance = 3 * coordinates[0];
 
   const yDistance =
     coordinates[0] % 2 === 0
-      ? Math.sqrt(3) * size * 2 * coordinates[1]
-      : Math.sqrt(3) * size * (2 * coordinates[1] + 1);
-  const top = view.centerY - yDistance;
+      ? Math.sqrt(3) * 2 * coordinates[1]
+      : Math.sqrt(3) * (2 * coordinates[1] + 1);
 
-  return [left, top];
+  return [xDistance, yDistance];
 };
 
 /**
- * Updates pan boundaries when a new tile is rendered.
- * @param {[number, number]} viewPosition Absolute position of the new tile, represented as [left, top] (in pixels).
+ * Updates pan boundaries when a new tile is rendered, represented as distance factors.
+ * @param {[number, number]} distanceFactors Distance factors, represented as [x, y]. (distance from center = tile size * distance factor)
  */
-const updatePanBounds = (viewPosition) => {
-  const [left, top] = [...viewPosition];
+const updatePanBounds = (distanceFactors) => {
+  const [x, y] = [...distanceFactors];
 
   if (pan.bounds.top === null) {
-    pan.bounds.top = top;
-  } else if (top < pan.bounds.top) {
-    pan.bounds.top = top;
+    pan.bounds.top = y;
+  } else if (y > pan.bounds.top) {
+    pan.bounds.top = y;
   }
 
   if (pan.bounds.right === null) {
-    pan.bounds.right = left;
-  } else if (left > pan.bounds.right) {
-    pan.bounds.right = left;
+    pan.bounds.right = x;
+  } else if (x > pan.bounds.right) {
+    pan.bounds.right = x;
   }
 
   if (pan.bounds.bottom === null) {
-    pan.bounds.bottom = top;
-  } else if (top > pan.bounds.bottom) {
-    pan.bounds.bottom = top;
+    pan.bounds.bottom = y;
+  } else if (y < pan.bounds.bottom) {
+    pan.bounds.bottom = y;
   }
 
   if (pan.bounds.left === null) {
-    pan.bounds.left = left;
-  } else if (left < pan.bounds.left) {
-    pan.bounds.left = left;
+    pan.bounds.left = x;
+  } else if (x < pan.bounds.left) {
+    pan.bounds.left = x;
   }
 };
 
@@ -104,8 +83,8 @@ const renderNextTile = () => {
   // create container //
   const tile = document.createElement("div");
   tile.classList.add("next-tile");
-  tile.style.width = `${tileSize.getWidth}px`;
-  tile.style.height = `${tileSize.getWidth}px`;
+  tile.style.width = `${tiles.width}px`;
+  tile.style.height = `${tiles.width}px`;
 
   // fill container //
   // render background
@@ -139,20 +118,21 @@ const renderNextTile = () => {
 const renderTile = (index) => {
   // get information needed //
   const tileData = boardData[index];
-  const position = getViewPosition(index);
-  const width = tileSize.getWidth;
+  const [xDistance, yDistance] = [...getDistanceFactors(index)];
+  const offsetLeft = view.centerLeft + xDistance * tiles.size;
+  const offsetTop = view.centerTop - yDistance * tiles.size;
 
   // update pan boundaries //
-  updatePanBounds(position);
+  updatePanBounds([xDistance, yDistance]);
 
   // create container //
   const newTile = document.createElement("div");
   newTile.classList.add("tile");
   newTile.setAttribute("index", `${index}`);
-  newTile.style.width = `${width}px`;
-  newTile.style.height = `${width}px`;
-  newTile.style.left = `${position[0]}px`;
-  newTile.style.top = `${position[1]}px`;
+  newTile.style.width = `${tiles.width}px`;
+  newTile.style.height = `${tiles.width}px`;
+  newTile.style.left = `${offsetLeft}px`;
+  newTile.style.top = `${offsetTop}px`;
 
   // fill container //
   if (tileData.status === "available") {
@@ -202,25 +182,33 @@ const renderStaticNext = () => {
 };
 
 /**
- * Renders a next tile that follows the cursor, shown on hover devices.
+ * Renders a next tile that follows the cursor, shown on devices with hover.
  * @returns {Element} DOM element of next tile to be placed, for devices with hover.
  */
 const renderTrackingNext = () => {
+  // rnder next tile //
+  // render content
   const tile = renderNextTile();
+  // add tracking specific classes
   tile.classList.add("hover");
   tile.classList.add("next-tile--tracking");
 
+  // style wrapper //
+  const trackingWrapper = document.querySelector(
+    ".next-tile__zoom-wrapper--tracking",
+  );
+  trackingWrapper.style.width = `${tiles.width}px`;
+  trackingWrapper.style.height = `${tiles.width}px`;
   // place at current cursor position
-  tile.style.left = `${view.nextTileX}px`;
-  tile.style.top = `${view.nextTileY}px`;
-
+  trackingWrapper.style.left = `${tiles.trackingLeft}px`;
+  trackingWrapper.style.top = `${tiles.trackingTop}px`;
   // add listener to follow cursor
-  const board = document.querySelector(".board");
-  board.addEventListener("mousemove", (e) => {
-    view.nextTileX = e.clientX - board.offsetLeft - tileSize.getWidth / 2;
-    view.nextTileY = e.clientY - board.offsetTop - tileSize.getWidth / 2;
-    tile.style.left = `${view.nextTileX}px`;
-    tile.style.top = `${view.nextTileY}px`;
+  const viewBox = document.querySelector(".view-box");
+  viewBox.addEventListener("mousemove", (e) => {
+    tiles.trackingLeft = e.clientX - viewBox.offsetLeft - tiles.width / 2;
+    tiles.trackingTop = e.clientY - viewBox.offsetTop - tiles.width / 2;
+    trackingWrapper.style.left = `${tiles.trackingLeft}px`;
+    trackingWrapper.style.top = `${tiles.trackingTop}px`;
   });
 
   return tile;
@@ -229,14 +217,14 @@ const renderTrackingNext = () => {
 /**
  * Initializes position at which to render next tile.
  */
-const initializeNextTilePosition = async () => {
+const initializeTrackingPosition = async () => {
   await new Promise((resolve) => {
     document.addEventListener(
       "mouseover",
       (e) => {
-        const board = document.querySelector(".board");
-        view.nextTileX = e.clientX - board.offsetLeft - tileSize.getWidth / 2;
-        view.nextTileY = e.clientY - board.offsetTop - tileSize.getWidth / 2;
+        const viewBox = document.querySelector(".view-box");
+        tiles.trackingLeft = e.clientX - viewBox.offsetLeft - tiles.width / 2;
+        tiles.trackingTop = e.clientY - viewBox.offsetTop - tiles.width / 2;
         resolve();
       },
       { once: true },
@@ -249,7 +237,7 @@ const initializeNextTilePosition = async () => {
 };
 
 export {
-  initializeNextTilePosition,
+  initializeTrackingPosition,
   renderStaticNext,
   renderTile,
   renderTrackingNext,

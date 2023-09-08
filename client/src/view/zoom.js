@@ -1,97 +1,66 @@
 /// Imports ///
-import clearBoardView from "./clear-board-view";
-import renderBoard from "./render-board";
-import { tileSize } from "../model/view-data";
+import { tiles, view, zoom } from "../model/view-data";
+import { updatePan } from "./pan";
 
 /// Constants ///
-/**
- * Minimum size of tiles at default.
- */
-const MIN_DEFAULT_SIZE = 20;
-/**
- * Minimum number of tiles on shorter dimension at default.
- */
-const MIN_DEFAULT_TILES = 8;
 /**
  * Minimum number of tiles on shorter dimension with zoom.
  */
 const MIN_ZOOM_TILES = 2;
 /**
- * Amount to increment size by when zooming in.
+ * Amount to change zoom factor by when zooming in/out.
  */
-const ZOOM_FACTOR = 12 / 10;
+const ZOOM_CHANGE_FACTOR = 12 / 10;
+/**
+ * Zoom transition duration, in ms.
+ */
+const ZOOM_DURATION = 250;
 
 /// Private ///
 /**
- * Updates tile width in CSS.
+ * Updates zoom factor in CSS.
  */
 const updateCSS = () => {
-  const nextInterface = document.querySelector(".no-hover");
-  nextInterface.style.setProperty("--tile-width", `${tileSize.getWidth}px`);
-};
-
-/**
- * Rerenders view.
- */
-const rerender = () => {
-  clearBoardView();
-  renderBoard();
+  const main = document.querySelector(".main");
+  main.style.setProperty("--zoom-factor", `${zoom.factor}`);
 };
 
 /**
  * Handles zooming in.
  */
 const zoomIn = () => {
-  const newSize = tileSize.get * ZOOM_FACTOR;
-  const board = document.querySelector(".board");
-  const maxSize =
-    Math.min(board.offsetWidth, board.offsetHeight) /
-    MIN_ZOOM_TILES /
-    tileSize.sizeFactor;
-  tileSize.set = newSize > maxSize ? maxSize : newSize;
+  // update data
+  const newZoom = zoom.factor * ZOOM_CHANGE_FACTOR;
+  const maxZoom =
+    Math.min(view.width, view.height) / MIN_ZOOM_TILES / tiles.width;
+  zoom.factor = newZoom > maxZoom ? maxZoom : newZoom;
 
+  // apply data
   updateCSS();
-  rerender();
+  setTimeout(updatePan, ZOOM_DURATION);
 };
 
 /**
  * Handles zooming out.
  */
 const zoomOut = () => {
-  tileSize.set = tileSize.get / ZOOM_FACTOR;
+  // update data
+  zoom.factor /= ZOOM_CHANGE_FACTOR;
 
+  // apply data
   updateCSS();
-  rerender();
+  setTimeout(updatePan, ZOOM_DURATION);
 };
 
 /// Public ///
 /**
- * Initializes zoom to default level and updates relevant data.
- */
-const initializeZoom = () => {
-  const board = document.querySelector(".board");
-  tileSize.set = Math.max(
-    Math.min(board.offsetWidth, board.offsetHeight) /
-      MIN_DEFAULT_TILES /
-      tileSize.sizeFactor,
-    MIN_DEFAULT_SIZE,
-  );
-
-  updateCSS();
-};
-
-/**
  * Adjusts zoom when window is resized.
  */
 const adjustZoom = () => {
-  const board = document.querySelector(".board");
-
-  const maxSize =
-    Math.min(board.offsetWidth, board.offsetHeight) /
-    MIN_ZOOM_TILES /
-    tileSize.sizeFactor;
-
-  tileSize.set = tileSize.get > maxSize ? maxSize : tileSize.get;
+  const currZoom = zoom.factor;
+  const maxZoom =
+    Math.min(view.width, view.height) / MIN_ZOOM_TILES / tiles.width;
+  zoom.factor = currZoom > maxZoom ? maxZoom : currZoom;
 
   updateCSS();
 };
@@ -113,4 +82,4 @@ const listenZoom = () => {
   zoomOutBtn.addEventListener("click", zoomOut);
 };
 
-export { adjustZoom, initializeZoom, listenZoom };
+export { adjustZoom, listenZoom };

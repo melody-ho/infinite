@@ -4,6 +4,11 @@
   overflow: clip;
 }
 
+.zoom-wrapper {
+  transform: scale(var(--zoom-factor));
+  transition: transform 0.25s ease-in;
+}
+
 .next-tile-interface__preview,
 .zoom-interface__zoom-in-btn,
 .zoom-interface__zoom-out-btn {
@@ -15,6 +20,7 @@
   bottom: 5vh;
   position: absolute;
   right: 5vw;
+  z-index: 1;
 }
 
 .zoom-interface__zoom-in-btn,
@@ -22,7 +28,7 @@
   border-radius: 20%;
 }
 
-.board {
+.view-box {
   -webkit-user-select: none;
   height: 98vh;
   left: 1vw;
@@ -33,6 +39,17 @@
   width: 98vw;
 }
 
+.board__zoom-wrapper {
+  transform-origin: 49vw 49vh; /* center of view box */
+}
+
+.board {
+  position: relative;
+  transform: translate(var(--move-x), var(--move-y));
+  transition: var(--pan-transition);
+}
+
+.next-tile__zoom-wrapper--tracking,
 .next-tile,
 .next-tile__background,
 .next-tile__foreground,
@@ -43,18 +60,14 @@
   position: absolute;
 }
 
-.tile {
-  transform: translate(var(--move-x), var(--move-y));
-  transition: var(--keyboard-pan-transition);
-}
-
 @media (hover: none) {
   .body {
     touch-action: none;
   }
 
-  .next-tile-interface,
-  .zoom-interface {
+  .next-tile-interface__zoom-wrapper {
+    position: relative;
+    transform-origin: right;
     z-index: 1;
   }
 
@@ -95,12 +108,10 @@
 @media not (hover: none) {
   .zoom-interface {
     width: max(40px, 3vw);
-    z-index: 2;
   }
 
-  .next-tile--tracking {
+  .next-tile__zoom-wrapper--tracking {
     pointer-events: none;
-    z-index: 1;
   }
 
   .no-hover {
