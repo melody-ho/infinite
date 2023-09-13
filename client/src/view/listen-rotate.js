@@ -7,6 +7,10 @@ import rotateTile from "../controller/rotate-tile";
  */
 const DEGREES = 60;
 /**
+ * Maximum time between taps to register as double tap, in ms.
+ */
+const DOUBLE_TAP_MAX_LAPSE = 250;
+/**
  * Rotation index at which the tile rotates full circle.
  * (360 / 60)
  */
@@ -71,8 +75,31 @@ const listenRotate = () => {
     }
   });
 
-  // touch control //
-  const rotateRightBtn = document.querySelector(".next-tile-interface__rotate-right-btn");
+  // mouse controls //
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+  });
+  document.addEventListener("auxclick", (e) => {
+    if (e.button === 2) handleRotateRight();
+  });
+
+  // touch controls //
+  let doubleTap = false;
+  document.addEventListener("touchend", () => {
+    if (!doubleTap) {
+      doubleTap = true;
+      setTimeout(() => {
+        doubleTap = false;
+      }, DOUBLE_TAP_MAX_LAPSE);
+    } else {
+      handleRotateRight();
+    }
+  });
+
+  // button controls //
+  const rotateRightBtn = document.querySelector(
+    ".next-tile-interface__rotate-right-btn",
+  );
   rotateRightBtn.addEventListener("click", handleRotateRight);
 };
 

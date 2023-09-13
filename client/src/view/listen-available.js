@@ -5,9 +5,13 @@ import validatePlace from "../controller/validate-place";
 
 /// Constants ///
 /**
+ * Minimum time between taps to register as separate taps (ms).
+ */
+const SINGLE_TAP_MIN_LAPSE = 280;
+/**
  * Threshold of touch length for registering as tap event (ms).
  */
-const TIME_THRESHOLD = 50;
+const TAP_DURATION_THRESHOLD = 50;
 
 /// Private ///
 /**
@@ -57,7 +61,9 @@ const listenAvailable = (element) => {
     window.removeEventListener("mouseup", handleClickEnd);
   };
 
-  element.addEventListener("mousedown", handleClickStart);
+  element.addEventListener("mousedown", (e) => {
+    if (e.button === 0) handleClickStart(e);
+  });
 
   // touch controls //
   let touchTarget = null;
@@ -66,6 +72,7 @@ const listenAvailable = (element) => {
   let touchStartY = 0;
   let touchDeltaX = 0;
   let touchDeltaY = 0;
+  let tapTimer = null;
 
   const handleTouchStart = (startEvent) => {
     touchTarget = startEvent.target;
@@ -84,10 +91,18 @@ const listenAvailable = (element) => {
   const handleTouchEnd = () => {
     const lapse = new Date() - touchStartT;
     if (
-      lapse > TIME_THRESHOLD &&
+      lapse > TAP_DURATION_THRESHOLD &&
       (Math.abs(touchDeltaX) <= 0 || Math.abs(touchDeltaY) <= 0)
     ) {
-      handlePlaceAttempt(touchTarget);
+      if (tapTimer === null) {
+        tapTimer = setTimeout(() => {
+          tapTimer = null;
+          handlePlaceAttempt(touchTarget);
+        }, SINGLE_TAP_MIN_LAPSE);
+      } else {
+        clearTimeout(tapTimer);
+        tapTimer = null;
+      }
     }
     touchDeltaX = 0;
     touchDeltaY = 0;
