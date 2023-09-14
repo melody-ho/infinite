@@ -224,36 +224,42 @@ const listenPan = () => {
   });
 
   viewBox.addEventListener("mousedown", (startEvent) => {
-    dragStartX = startEvent.clientX;
-    dragStartY = startEvent.clientY;
-    viewBox.addEventListener("mousemove", handleDrag);
-    viewBox.addEventListener("mouseup", handleDragEnd);
-    viewBox.addEventListener("mouseleave", handleDragEnd);
+    if (startEvent.button === 0) {
+      dragStartX = startEvent.clientX;
+      dragStartY = startEvent.clientY;
+      viewBox.addEventListener("mousemove", handleDrag);
+      viewBox.addEventListener("mouseup", handleDragEnd);
+      viewBox.addEventListener("mouseleave", handleDragEnd);
+    };
   });
 
   const handleDrag = (dragEvent) => {
-    const { xMin, xMax, yMin, yMax } = pan.getLimits();
-    dragDeltaX = dragEvent.clientX - dragStartX;
-    dragDeltaY = dragEvent.clientY - dragStartY;
-
-    if ((dragDeltaX > 0 && pan.x < xMax) || (dragDeltaX < 0 && pan.x > xMin)) {
-      pan.changeX(dragDeltaX);
-      dragStartX = dragEvent.clientX;
+    if (dragEvent.button === 0) {
+      const { xMin, xMax, yMin, yMax } = pan.getLimits();
+      dragDeltaX = dragEvent.clientX - dragStartX;
+      dragDeltaY = dragEvent.clientY - dragStartY;
+  
+      if ((dragDeltaX > 0 && pan.x < xMax) || (dragDeltaX < 0 && pan.x > xMin)) {
+        pan.changeX(dragDeltaX);
+        dragStartX = dragEvent.clientX;
+      }
+      if ((dragDeltaY > 0 && pan.y < yMax) || (dragDeltaY < 0 && pan.y > yMin)) {
+        pan.changeY(dragDeltaY);
+        dragStartY = dragEvent.clientY;
+      }
+  
+      applyPan();
     }
-    if ((dragDeltaY > 0 && pan.y < yMax) || (dragDeltaY < 0 && pan.y > yMin)) {
-      pan.changeY(dragDeltaY);
-      dragStartY = dragEvent.clientY;
-    }
-
-    applyPan();
   };
 
-  const handleDragEnd = () => {
-    dragDeltaX = 0;
-    dragDeltaY = 0;
-    viewBox.removeEventListener("mousemove", handleDrag);
-    viewBox.removeEventListener("mouseup", handleDragEnd);
-    viewBox.removeEventListener("mouseleave", handleDragEnd);
+  const handleDragEnd = (endEvent) => {
+    if (endEvent.button === 0) {
+      dragDeltaX = 0;
+      dragDeltaY = 0;
+      viewBox.removeEventListener("mousemove", handleDrag);
+      viewBox.removeEventListener("mouseup", handleDragEnd);
+      viewBox.removeEventListener("mouseleave", handleDragEnd);
+    }
   };
 
   // touch controls //
