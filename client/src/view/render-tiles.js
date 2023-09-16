@@ -189,8 +189,7 @@ const renderTrackingNext = () => {
   // rnder next tile //
   // render content
   const tile = renderNextTile();
-  // add tracking specific classes
-  tile.classList.add("hover");
+  // add tracking specific class
   tile.classList.add("next-tile--tracking");
 
   // style wrapper //
