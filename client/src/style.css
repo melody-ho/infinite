@@ -60,6 +60,10 @@
   position: absolute;
 }
 
+.next-tile {
+  transition: transform 0.2s ease-out;
+}
+
 @media (hover: none) {
   .body {
     touch-action: none;

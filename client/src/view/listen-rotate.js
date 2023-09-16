@@ -11,11 +11,6 @@ const DEGREES = 60;
  */
 const DOUBLE_TAP_MAX_LAPSE = 250;
 /**
- * Rotation index at which the tile rotates full circle.
- * (360 / 60)
- */
-const MAX_ROTATES = 6;
-/**
  * Change in rotation index when rotated left.
  */
 const ROTATE_LEFT = -1;
@@ -33,9 +28,7 @@ const handleRotateLeft = () => {
   for (let i = 0; i < tiles.length; i += 1) {
     const tile = tiles[i];
 
-    const rotation =
-      (MAX_ROTATES + (Number(tile.getAttribute("rotation")) + ROTATE_LEFT)) %
-      MAX_ROTATES;
+    const rotation = Number(tile.getAttribute("rotation")) + ROTATE_LEFT;
     tile.setAttribute("rotation", `${rotation}`);
     tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
   }
@@ -51,8 +44,7 @@ const handleRotateRight = () => {
   for (let i = 0; i < tiles.length; i += 1) {
     const tile = tiles[i];
 
-    const rotation =
-      (Number(tile.getAttribute("rotation")) + ROTATE_RIGHT) % MAX_ROTATES;
+    const rotation = Number(tile.getAttribute("rotation")) + ROTATE_RIGHT;
     tile.setAttribute("rotation", `${rotation}`);
     tile.style.transform = `rotate(${rotation * DEGREES}deg)`;
   }
@@ -84,8 +76,9 @@ const listenRotate = () => {
   });
 
   // touch controls //
+  const viewBox = document.querySelector(".view-box");
   let doubleTap = false;
-  document.addEventListener("touchend", () => {
+  viewBox.addEventListener("touchend", () => {
     if (!doubleTap) {
       doubleTap = true;
       setTimeout(() => {
