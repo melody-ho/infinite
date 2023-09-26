@@ -42,8 +42,8 @@ const listenAvailable = (element) => {
     clickTarget = startEvent.target;
     clickStartX = startEvent.clientX;
     clickStartY = startEvent.clientY;
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleClickEnd);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleClickEnd);
   };
 
   const handleMouseMove = (moveEvent) => {
@@ -57,8 +57,8 @@ const listenAvailable = (element) => {
     }
     clickDeltaX = 0;
     clickDeltaY = 0;
-    window.removeEventListener("mousemove", handleMouseMove);
-    window.removeEventListener("mouseup", handleClickEnd);
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleClickEnd);
   };
 
   element.addEventListener("mousedown", (e) => {
@@ -79,8 +79,8 @@ const listenAvailable = (element) => {
     touchStartT = new Date();
     touchStartX = startEvent.touches[0].clientX;
     touchStartY = startEvent.touches[0].clientY;
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
   };
 
   const handleTouchMove = (moveEvent) => {
@@ -106,8 +106,8 @@ const listenAvailable = (element) => {
     }
     touchDeltaX = 0;
     touchDeltaY = 0;
-    window.removeEventListener("touchmove", handleTouchMove);
-    window.removeEventListener("touchend", handleTouchEnd);
+    document.removeEventListener("touchmove", handleTouchMove);
+    document.removeEventListener("touchend", handleTouchEnd);
   };
 
   element.addEventListener("touchstart", handleTouchStart);
