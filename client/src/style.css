@@ -1,5 +1,5 @@
 .body {
-  background-color: rgb(15, 15, 15);
+  background-color: rgb(20, 20, 20);
   margin: 0;
   overflow: clip;
 }
@@ -44,6 +44,8 @@
 }
 
 .board {
+  -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.8) 6px 5px 1px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.8) 6px 5px 1px);
   position: relative;
   transform: translate(var(--move-x), var(--move-y));
   transition: var(--pan-transition);
@@ -116,6 +118,11 @@
 
   .next-tile__zoom-wrapper--tracking {
     pointer-events: none;
+  }
+
+  .next-tile--tracking {
+    -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.6) 6px 5px 2px);
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 6px 5px 2px);
   }
 
   .no-hover {
