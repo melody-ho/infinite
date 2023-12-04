@@ -1,4 +1,5 @@
 /// Imports ///
+import { revalidatePreview } from "./render-preview";
 import rotateTile from "../controller/rotate-tile";
 
 /// Constants ///
@@ -42,6 +43,7 @@ const handleRotateLeft = () => {
   }
 
   rotateTile("left");
+  revalidatePreview();
 };
 
 /**
@@ -58,6 +60,7 @@ const handleRotateRight = () => {
   }
 
   rotateTile("right");
+  revalidatePreview();
 };
 
 /// Public ///

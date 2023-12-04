@@ -235,8 +235,19 @@ const initializeTrackingPosition = async () => {
   });
 };
 
+/**
+ * Renders preview of next tile placement.
+ * @returns {Element} DOM element of next tile placement preview.
+ */
+const renderNextTilePreview = () => {
+  const tile = renderNextTile();
+  tile.classList.add("next-tile--preview");
+  return tile;
+};
+
 export {
   initializeTrackingPosition,
+  renderNextTilePreview,
   renderStaticNext,
   renderTile,
   renderTrackingNext,

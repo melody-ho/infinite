@@ -1,9 +1,15 @@
 /// Imports ///
 import { nextTile } from "../model/board-data";
 import placeTile from "../controller/place-tile";
+import { preview } from "../model/view-data";
 import validatePlace from "../controller/validate-place";
+import { createPreview, removePreview } from "./render-preview";
 
 /// Constants ///
+/**
+ * Preview flash duration for invalid placement on mobile.
+ */
+const INVALID_FLASH_DURATION = 500;
 /**
  * Minimum time between clicks to register as separate single clicks (ms).
  */
@@ -21,12 +27,16 @@ const TAP_DURATION_THRESHOLD = 50;
 /**
  * Handles attempted placement by placing the tile if valid.
  * @param {Element} target DOM element where placement was attempted.
+ * @returns {boolean} Returns true if tile is successfully placed, false if placement invalid.
  */
 const handlePlaceAttempt = (target) => {
   const index = target.parentElement.getAttribute("index");
   if (validatePlace(index, nextTile.foreground)) {
     placeTile(index, [nextTile.background, nextTile.foreground]);
+    preview.reset();
+    return true;
   }
+  return false;
 };
 
 /// Public ///
@@ -36,6 +46,24 @@ const handlePlaceAttempt = (target) => {
  */
 const listenAvailable = (element) => {
   // mouse controls //
+  // showing preview on hover
+  const handleMouseEnter = (enterEvent) => {
+    const index = enterEvent.target.getAttribute("index");
+    preview.index = index;
+    createPreview(index);
+  };
+
+  element.addEventListener("mouseenter", handleMouseEnter);
+
+  const handleMouseLeave = (leaveEvent) => {
+    const index = leaveEvent.target.getAttribute("index");
+    removePreview(index);
+    preview.reset();
+  };
+
+  element.addEventListener("mouseleave", handleMouseLeave);
+
+  // attempt place on single click
   let clickTarget = null;
   let clickStartX = 0;
   let clickStartY = 0;
@@ -112,7 +140,12 @@ const listenAvailable = (element) => {
       if (taps === 1) {
         if (tapTimer) clearTimeout(tapTimer);
         tapTimer = setTimeout(() => {
-          handlePlaceAttempt(touchTarget);
+          if (!handlePlaceAttempt(touchTarget)) {
+            createPreview(touchTarget.parentElement.getAttribute("index"));
+            setTimeout(() => {
+              removePreview(touchTarget.parentElement.getAttribute("index"));
+            }, INVALID_FLASH_DURATION);
+          }
           taps = 0;
         }, SINGLE_TAP_MIN_LAPSE);
       } else if (taps === 2) {

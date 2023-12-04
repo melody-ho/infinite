@@ -66,6 +66,14 @@
   transition: transform 0.2s ease-out;
 }
 
+.next-tile--preview {
+  pointer-events: none;
+}
+
+.next-tile--preview.next-tile--invalid {
+  opacity: 0.8;
+}
+
 @media (hover: none) {
   .body {
     touch-action: none;
@@ -118,6 +126,10 @@
     width: max(40px, 10vw);
   }
 
+  .next-tile--preview {
+    z-index: 2;
+  }
+
   .hover {
     display: none;
   }
@@ -135,6 +147,14 @@
   .next-tile--tracking {
     -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.6) 6px 5px 2px);
     filter: drop-shadow(rgba(0, 0, 0, 0.6) 6px 5px 2px);
+  }
+
+  .next-tile--tracking.next-tile--hidden {
+    display: none;
+  }
+
+  .next-tile--preview {
+    z-index: 1;
   }
 
   .no-hover {

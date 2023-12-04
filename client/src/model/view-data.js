@@ -275,4 +275,35 @@ const pan = {
   },
 };
 
-export { pan, tiles, view, zoom };
+/**
+ * Object containing location of current preview position and its getter and setter.
+ * @type {Object}
+ */
+const preview = {
+  /**
+   * Index of preview location, represented as "x,y".
+   * @type {string}
+   */
+  i: null,
+  /**
+   * Set index of preview location, represented as "x,y".
+   * @param {string} newIndex Index of new preview location.
+   */
+  set index(newIndex) {
+    this.i = newIndex;
+  },
+  /**
+   * Get index of preview location, represented as "x,y".
+   */
+  get index() {
+    return this.i;
+  },
+  /**
+   * Reset preview location.
+   */
+  reset() {
+    this.i = null;
+  },
+};
+
+export { pan, preview, tiles, view, zoom };
