@@ -7,9 +7,13 @@ import rotateTile from "../controller/rotate-tile";
  */
 const DEGREES = 60;
 /**
- * Maximum time between taps to register as double tap, in ms.
+ * Maximum time between clicks to register as double click, in ms.
  */
-const DOUBLE_TAP_MAX_LAPSE = 250;
+const DOUBLE_CLICK_MAX_LAPSE = 250;
+/**
+ * Maximum time between taps to register as multi tap, in ms.
+ */
+const MULTI_TAP_MAX_LAPSE = 250;
 /**
  * Change in rotation index when rotated left.
  */
@@ -18,6 +22,10 @@ const ROTATE_LEFT = -1;
  * Change in rotation index when rotated right.
  */
 const ROTATE_RIGHT = 1;
+/**
+ * Minimum time between wheel events firing to trigger rotation, in ms.
+ */
+const WHEEL_EVENT_INTERVAL = 100;
 
 /// Private ///
 /**
@@ -74,18 +82,64 @@ const listenRotate = () => {
   document.addEventListener("auxclick", (e) => {
     if (e.button === 2) handleRotateRight();
   });
+  let doubleClick = false;
+  document.addEventListener("mouseup", () => {
+    if (!doubleClick) {
+      doubleClick = true;
+      setTimeout(() => {
+        doubleClick = false;
+      }, DOUBLE_CLICK_MAX_LAPSE);
+    } else {
+      handleRotateLeft();
+    }
+  });
+
+  // wheel controls //
+  let wheelThrottled = false;
+  let wheelTimer = null;
+  function resetTimer() {
+    if (wheelTimer) clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => {
+      wheelThrottled = false;
+      wheelTimer = null;
+    }, WHEEL_EVENT_INTERVAL);
+  }
+  document.addEventListener("wheel", (e) => {
+    if (!wheelThrottled) {
+      wheelThrottled = true;
+      if (e.deltaY < 0) {
+        handleRotateLeft();
+      } else if (e.deltaY > 0) {
+        handleRotateRight();
+      }
+      resetTimer();
+    } else {
+      resetTimer();
+    }
+  });
 
   // touch controls //
   const viewBox = document.querySelector(".view-box");
-  let doubleTap = false;
+  let taps = 0;
+  let tapTimer = null;
   viewBox.addEventListener("touchend", () => {
-    if (!doubleTap) {
-      doubleTap = true;
-      setTimeout(() => {
-        doubleTap = false;
-      }, DOUBLE_TAP_MAX_LAPSE);
-    } else {
+    taps += 1;
+    if (taps === 1) {
+      if (tapTimer) clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => {
+        taps = 0;
+      }, MULTI_TAP_MAX_LAPSE);
+    } else if (taps === 2) {
+      if (tapTimer) clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => {
+        handleRotateLeft();
+        taps = 0;
+      }, MULTI_TAP_MAX_LAPSE);
+    } else if (taps === 3) {
+      if (tapTimer) clearTimeout(tapTimer);
       handleRotateRight();
+      taps = 0;
+      tapTimer = null;
     }
   });
 
@@ -94,6 +148,10 @@ const listenRotate = () => {
     ".next-tile-interface__rotate-right-btn",
   );
   rotateRightBtn.addEventListener("click", handleRotateRight);
+  const rotateLeftBtn = document.querySelector(
+    ".next-tile-interface__rotate-left-btn",
+  );
+  rotateLeftBtn.addEventListener("click", handleRotateLeft);
 };
 
 export default listenRotate;

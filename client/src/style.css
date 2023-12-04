@@ -82,6 +82,7 @@
     margin-top: 2vh;
     position: absolute;
     right: calc(var(--tile-width) * (-1 / 4) + 2vw);
+    top: calc(var(--tile-width) * (1 / 4));
   }
 
   .next-tile-interface__preview {
@@ -94,12 +95,23 @@
     width: calc(var(--tile-width) * (6 / 5));
   }
 
+  .next-tile-interface__rotate-left-btn,
+  .next-tile-interface__rotate-right-btn {
+    position: relative;
+    width: calc(var(--tile-width) * (1 / 2));
+    z-index: 1;
+  }
+
+  .next-tile-interface__rotate-left-btn {
+    align-self: flex-start;
+    left: calc(var(--tile-width) * (1 / 4));
+    top: calc(var(--tile-width) * (-1 / 4));
+  }
+
   .next-tile-interface__rotate-right-btn {
     align-self: flex-end;
     left: calc(var(--tile-width) * (-1 / 4));
-    position: relative;
     top: calc(var(--tile-width) * (1 / 4));
-    width: calc(var(--tile-width) * (1 / 2));
   }
 
   .zoom-interface {

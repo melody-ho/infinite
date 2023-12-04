@@ -5,9 +5,13 @@ import validatePlace from "../controller/validate-place";
 
 /// Constants ///
 /**
- * Minimum time between taps to register as separate taps (ms).
+ * Minimum time between clicks to register as separate single clicks (ms).
  */
-const SINGLE_TAP_MIN_LAPSE = 280;
+const SINGLE_CLICK_MIN_LAPSE = 220;
+/**
+ * Minimum time between taps to register as separate single taps (ms).
+ */
+const SINGLE_TAP_MIN_LAPSE = 350;
 /**
  * Threshold of touch length for registering as tap event (ms).
  */
@@ -37,6 +41,7 @@ const listenAvailable = (element) => {
   let clickStartY = 0;
   let clickDeltaX = 0;
   let clickDeltaY = 0;
+  let clickTimer = null;
 
   const handleClickStart = (startEvent) => {
     clickTarget = startEvent.target;
@@ -53,7 +58,15 @@ const listenAvailable = (element) => {
 
   const handleClickEnd = () => {
     if (clickDeltaX === 0 && clickDeltaY === 0) {
-      handlePlaceAttempt(clickTarget);
+      if (clickTimer === null) {
+        clickTimer = setTimeout(() => {
+          clickTimer = null;
+          handlePlaceAttempt(clickTarget);
+        }, SINGLE_CLICK_MIN_LAPSE);
+      } else {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+      }
     }
     clickDeltaX = 0;
     clickDeltaY = 0;
@@ -73,6 +86,7 @@ const listenAvailable = (element) => {
   let touchDeltaX = 0;
   let touchDeltaY = 0;
   let tapTimer = null;
+  let taps = 0;
 
   const handleTouchStart = (startEvent) => {
     touchTarget = startEvent.target;
@@ -94,13 +108,21 @@ const listenAvailable = (element) => {
       lapse > TAP_DURATION_THRESHOLD &&
       (Math.abs(touchDeltaX) <= 0 || Math.abs(touchDeltaY) <= 0)
     ) {
-      if (tapTimer === null) {
+      taps += 1;
+      if (taps === 1) {
+        if (tapTimer) clearTimeout(tapTimer);
         tapTimer = setTimeout(() => {
-          tapTimer = null;
           handlePlaceAttempt(touchTarget);
+          taps = 0;
         }, SINGLE_TAP_MIN_LAPSE);
-      } else {
-        clearTimeout(tapTimer);
+      } else if (taps === 2) {
+        if (tapTimer) clearTimeout(tapTimer);
+        tapTimer = setTimeout(() => {
+          taps = 0;
+        }, SINGLE_TAP_MIN_LAPSE);
+      } else if (taps === 3) {
+        if (tapTimer) clearTimeout(tapTimer);
+        taps = 0;
         tapTimer = null;
       }
     }
