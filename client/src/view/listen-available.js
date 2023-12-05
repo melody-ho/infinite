@@ -18,10 +18,6 @@ const SINGLE_CLICK_MIN_LAPSE = 220;
  * Minimum time between taps to register as separate single taps (ms).
  */
 const SINGLE_TAP_MIN_LAPSE = 350;
-/**
- * Threshold of touch length for registering as tap event (ms).
- */
-const TAP_DURATION_THRESHOLD = 50;
 
 /// Private ///
 /**
@@ -108,7 +104,6 @@ const listenAvailable = (element) => {
 
   // touch controls //
   let touchTarget = null;
-  let touchStartT = null;
   let touchStartX = 0;
   let touchStartY = 0;
   let touchDeltaX = 0;
@@ -118,7 +113,6 @@ const listenAvailable = (element) => {
 
   const handleTouchStart = (startEvent) => {
     touchTarget = startEvent.target;
-    touchStartT = new Date();
     touchStartX = startEvent.touches[0].clientX;
     touchStartY = startEvent.touches[0].clientY;
     document.addEventListener("touchmove", handleTouchMove);
@@ -131,11 +125,7 @@ const listenAvailable = (element) => {
   };
 
   const handleTouchEnd = () => {
-    const lapse = new Date() - touchStartT;
-    if (
-      lapse > TAP_DURATION_THRESHOLD &&
-      (Math.abs(touchDeltaX) <= 0 || Math.abs(touchDeltaY) <= 0)
-    ) {
+    if (Math.abs(touchDeltaX) <= 0 || Math.abs(touchDeltaY) <= 0) {
       taps += 1;
       if (taps === 1) {
         if (tapTimer) clearTimeout(tapTimer);
