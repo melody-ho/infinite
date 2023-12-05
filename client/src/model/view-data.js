@@ -1,6 +1,6 @@
 /// Public ///
 /**
- * Object containing information for rendering tiles..
+ * Object containing information for rendering tiles.
  * @type {Object}
  */
 const tiles = {
