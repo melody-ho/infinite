@@ -86,14 +86,16 @@ const listenRotate = () => {
     if (e.button === 2) handleRotateRight();
   });
   let doubleClick = false;
-  document.addEventListener("mouseup", () => {
-    if (!doubleClick) {
-      doubleClick = true;
-      setTimeout(() => {
-        doubleClick = false;
-      }, DOUBLE_CLICK_MAX_LAPSE);
-    } else {
-      handleRotateLeft();
+  document.addEventListener("mouseup", (e) => {
+    if (!e.target.classList.contains("overlay-control")) {
+      if (!doubleClick) {
+        doubleClick = true;
+        setTimeout(() => {
+          doubleClick = false;
+        }, DOUBLE_CLICK_MAX_LAPSE);
+      } else {
+        handleRotateLeft();
+      }
     }
   });
 
@@ -125,24 +127,26 @@ const listenRotate = () => {
   const viewBox = document.querySelector(".view-box");
   let taps = 0;
   let tapTimer = null;
-  viewBox.addEventListener("touchend", () => {
-    taps += 1;
-    if (taps === 1) {
-      if (tapTimer) clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => {
+  viewBox.addEventListener("touchend", (e) => {
+    if (!e.target.classList.contains("overlay-control")) {
+      taps += 1;
+      if (taps === 1) {
+        if (tapTimer) clearTimeout(tapTimer);
+        tapTimer = setTimeout(() => {
+          taps = 0;
+        }, MULTI_TAP_MAX_LAPSE);
+      } else if (taps === 2) {
+        if (tapTimer) clearTimeout(tapTimer);
+        tapTimer = setTimeout(() => {
+          handleRotateLeft();
+          taps = 0;
+        }, MULTI_TAP_MAX_LAPSE);
+      } else if (taps === 3) {
+        if (tapTimer) clearTimeout(tapTimer);
+        handleRotateRight();
         taps = 0;
-      }, MULTI_TAP_MAX_LAPSE);
-    } else if (taps === 2) {
-      if (tapTimer) clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => {
-        handleRotateLeft();
-        taps = 0;
-      }, MULTI_TAP_MAX_LAPSE);
-    } else if (taps === 3) {
-      if (tapTimer) clearTimeout(tapTimer);
-      handleRotateRight();
-      taps = 0;
-      tapTimer = null;
+        tapTimer = null;
+      }
     }
   });
 
