@@ -87,7 +87,7 @@ const listenRotate = () => {
   });
   let doubleClick = false;
   document.addEventListener("mouseup", (e) => {
-    if (!e.target.classList.contains("overlay-control")) {
+    if (!e.target.classList.contains("overlay-control") && e.button === 0) {
       if (!doubleClick) {
         doubleClick = true;
         setTimeout(() => {
