@@ -11,7 +11,7 @@ import generateNextTile from "./generate-next-tile";
 /**
  * Transition duration for fading in new tile, in ms.
  */
-const TILE_FADE_DURATION = 550;
+const TILE_FADE_DURATION = 620;
 
 /**
  * @typedef {string} foregroundHash Tile edge types from top going clockwise, represented as a string of six numbers.

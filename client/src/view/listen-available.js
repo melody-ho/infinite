@@ -9,7 +9,7 @@ import { createPreview, removePreview } from "./render-preview";
 /**
  * Preview flash duration for invalid placement on mobile.
  */
-const INVALID_FLASH_DURATION = 500;
+const INVALID_FLASH_DURATION = 750;
 /**
  * Minimum time between clicks to register as separate single clicks (ms).
  */

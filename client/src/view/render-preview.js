@@ -4,6 +4,12 @@ import { preview } from "../model/view-data";
 import { renderNextTilePreview } from "./render-tiles";
 import validatePlace from "../controller/validate-place";
 
+/// Constants ///
+/**
+ * Duration of buffer for rendering SVG on screen, in ms.
+ */
+const SVG_RENDER_BUFFER = 220;
+
 /// Private ///
 /**
  * Hide tracking next tile.
@@ -29,11 +35,15 @@ const showTrackingNext = () => {
 const createPreview = (index) => {
   const container = document.querySelector(`[index = "${index}"]`);
   const tile = renderNextTilePreview();
+  tile.classList.add("svg-buffer");
   if (!validatePlace(index, nextTile.foreground)) {
     tile.classList.add("next-tile--invalid");
   }
-  hideTrackingNext();
   container.insertBefore(tile, container.firstChild);
+  setTimeout(() => {
+    hideTrackingNext();
+    tile.classList.remove("svg-buffer");
+  }, SVG_RENDER_BUFFER);
 };
 
 /**
