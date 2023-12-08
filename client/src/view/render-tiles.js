@@ -113,7 +113,7 @@ const renderNextTile = () => {
 /**
  * Creates DOM element for a specified tile.
  * @param {string} index Index of tile to render.
- * @returns {Object} Newly created DOM element for the tile specified.
+ * @returns {Element} Newly created DOM element for the tile specified.
  */
 const renderTile = (index) => {
   // get information needed //
