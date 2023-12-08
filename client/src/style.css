@@ -169,12 +169,12 @@
     filter: drop-shadow(rgba(0, 0, 0, 0.6) 6px 5px 2px);
   }
 
-  .next-tile--tracking.next-tile--hidden {
-    display: none;
-  }
-
   .next-tile--preview {
     z-index: 1;
+  }
+
+  .next-tile--hidden {
+    opacity: 0;
   }
 
   .no-hover {

@@ -8,24 +8,7 @@ import validatePlace from "../controller/validate-place";
 /**
  * Duration of buffer for rendering SVG on screen, in ms.
  */
-const SVG_RENDER_BUFFER = 220;
-
-/// Private ///
-/**
- * Hide tracking next tile.
- */
-const hideTrackingNext = () => {
-  const trackingNext = document.querySelector(".next-tile--tracking");
-  trackingNext.classList.add("next-tile--hidden");
-};
-
-/**
- * Show tracking next tile.
- */
-const showTrackingNext = () => {
-  const trackingNext = document.querySelector(".next-tile--tracking");
-  trackingNext.classList.remove("next-tile--hidden");
-};
+const SVG_RENDER_BUFFER = 100;
 
 /// Public ///
 /**
@@ -41,7 +24,6 @@ const createPreview = (index) => {
   }
   container.insertBefore(tile, container.firstChild);
   setTimeout(() => {
-    hideTrackingNext();
     tile.classList.remove("svg-buffer");
   }, SVG_RENDER_BUFFER);
 };
@@ -52,8 +34,19 @@ const createPreview = (index) => {
  */
 const removePreview = (index) => {
   const container = document.querySelector(`[index = "${index}"]`);
-  container.removeChild(container.firstChild);
-  showTrackingNext();
+  if (container.firstChild.classList.contains("next-tile--preview")) {
+    container.removeChild(container.firstChild);
+  }
+};
+
+/**
+ * Recreates preview.
+ */
+const recreatePreview = () => {
+  if (preview.index) {
+    removePreview(preview.index);
+    createPreview(preview.index);
+  }
 };
 
 /**
@@ -70,4 +63,4 @@ const revalidatePreview = () => {
   }
 };
 
-export { createPreview, removePreview, revalidatePreview };
+export { createPreview, recreatePreview, removePreview, revalidatePreview };

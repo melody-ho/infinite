@@ -3,7 +3,11 @@ import { nextTile } from "../model/board-data";
 import placeTile from "../controller/place-tile";
 import { preview } from "../model/view-data";
 import validatePlace from "../controller/validate-place";
-import { createPreview, removePreview } from "./render-preview";
+import {
+  createPreview,
+  recreatePreview,
+  removePreview,
+} from "./render-preview";
 
 /// Constants ///
 /**
@@ -26,12 +30,23 @@ const SINGLE_TAP_MIN_LAPSE = 350;
  * @returns {boolean} Returns true if tile is successfully placed, false if placement invalid.
  */
 const handlePlaceAttempt = (target) => {
+  // get index of attempted position //
   const index = target.parentElement.getAttribute("index");
+  // validate placement //
   if (validatePlace(index, nextTile.foreground)) {
+    // remove preview from position before placing tile //
+    if (preview.index === index) {
+      removePreview(index);
+      preview.reset();
+    }
+    // place tile //
     placeTile(index, [nextTile.background, nextTile.foreground]);
-    preview.reset();
+    // update preview with new next tile //
+    recreatePreview();
+    // report success status //
     return true;
   }
+  // report invalid status //
   return false;
 };
 

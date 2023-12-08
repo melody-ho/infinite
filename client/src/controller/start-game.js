@@ -1,5 +1,6 @@
 /// Imports ///
 import { initializeView, listenResize } from "../view/responsive-view";
+import initializeTrackingNextContainer from "../view/initialize-tracking-next-container";
 import { initializeTrackingPosition } from "../view/render-tiles";
 import { listenPan } from "../view/pan";
 import listenRotate from "../view/listen-rotate";
@@ -13,6 +14,7 @@ import placeTile from "./place-tile";
 const startGame = async () => {
   initializeView();
   await initializeTrackingPosition();
+  initializeTrackingNextContainer();
   placeTile("0,0", ["medium", "000000"]);
   listenRotate();
   listenResize();

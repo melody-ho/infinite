@@ -24,6 +24,10 @@ const ROTATE_LEFT = -1;
  */
 const ROTATE_RIGHT = 1;
 /**
+ * Duration of tile rotation transition, in ms.
+ */
+const ROTATE_TRANSITION_DURATION = 200;
+/**
  * Minimum time between wheel events firing to trigger rotation, in ms.
  */
 const WHEEL_EVENT_INTERVAL = 100;
@@ -43,7 +47,9 @@ const handleRotateLeft = () => {
   }
 
   rotateTile("left");
-  revalidatePreview();
+  setTimeout(() => {
+    revalidatePreview();
+  }, ROTATE_TRANSITION_DURATION);
 };
 
 /**
@@ -60,7 +66,9 @@ const handleRotateRight = () => {
   }
 
   rotateTile("right");
-  revalidatePreview();
+  setTimeout(() => {
+    revalidatePreview();
+  }, ROTATE_TRANSITION_DURATION);
 };
 
 /// Public ///

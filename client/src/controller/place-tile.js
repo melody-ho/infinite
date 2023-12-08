@@ -28,6 +28,9 @@ const placeTile = (index, tile) => {
   // update board data //
   const [filled, newAvailables] = addTileData(index, ...tile);
 
+  // generate next tile and update next tile data //
+  [nextTile.background, nextTile.foreground] = generateNextTile();
+
   // get board element //
   const board = document.querySelector(".board");
 
@@ -56,9 +59,6 @@ const placeTile = (index, tile) => {
       newAvailable.classList.remove("fade-in");
     }, TILE_FADE_DURATION);
   }
-
-  // generate next tile and update next tile data //
-  [nextTile.background, nextTile.foreground] = generateNextTile();
 
   // render next tile //
   // for devices with hover: next tile tracks cursor

@@ -186,29 +186,10 @@ const renderStaticNext = () => {
  * @returns {Element} DOM element of next tile to be placed, for devices with hover.
  */
 const renderTrackingNext = () => {
-  // rnder next tile //
-  // render content
+  // render content //
   const tile = renderNextTile();
-  // add tracking specific class
+  // add tracking specific class //
   tile.classList.add("next-tile--tracking");
-
-  // style wrapper //
-  const trackingWrapper = document.querySelector(
-    ".next-tile__zoom-wrapper--tracking",
-  );
-  trackingWrapper.style.width = `${tiles.width}px`;
-  trackingWrapper.style.height = `${tiles.width}px`;
-  // place at current cursor position
-  trackingWrapper.style.left = `${tiles.trackingLeft}px`;
-  trackingWrapper.style.top = `${tiles.trackingTop}px`;
-  // add listener to follow cursor
-  const viewBox = document.querySelector(".view-box");
-  viewBox.addEventListener("mousemove", (e) => {
-    tiles.trackingLeft = e.clientX - viewBox.offsetLeft - tiles.width / 2;
-    tiles.trackingTop = e.clientY - viewBox.offsetTop - tiles.width / 2;
-    trackingWrapper.style.left = `${tiles.trackingLeft}px`;
-    trackingWrapper.style.top = `${tiles.trackingTop}px`;
-  });
 
   return tile;
 };
