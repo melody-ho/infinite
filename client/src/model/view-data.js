@@ -286,17 +286,17 @@ const preview = {
    */
   i: null,
   /**
+   * Get index of preview location, represented as "x,y".
+   */
+  get index() {
+    return this.i;
+  },
+  /**
    * Set index of preview location, represented as "x,y".
    * @param {string} newIndex Index of new preview location.
    */
   set index(newIndex) {
     this.i = newIndex;
-  },
-  /**
-   * Get index of preview location, represented as "x,y".
-   */
-  get index() {
-    return this.i;
   },
   /**
    * Reset preview location.
