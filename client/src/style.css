@@ -20,6 +20,7 @@
   bottom: 5vh;
   position: absolute;
   right: 5vw;
+  width: max(40px, 3vw);
   z-index: 1;
 }
 
@@ -142,10 +143,6 @@
     top: calc(var(--tile-width) * (1 / 4));
   }
 
-  .zoom-interface {
-    width: max(40px, 10vw);
-  }
-
   .next-tile--preview {
     z-index: 2;
   }
@@ -156,10 +153,6 @@
 }
 
 @media not (hover: none) {
-  .zoom-interface {
-    width: max(40px, 3vw);
-  }
-
   .next-tile__zoom-wrapper--tracking {
     pointer-events: none;
   }
