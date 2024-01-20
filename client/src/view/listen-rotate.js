@@ -86,15 +86,17 @@ const listenRotate = () => {
     }
   });
 
+  const viewBox = document.querySelector(".view-box");
+
   // mouse controls //
-  document.addEventListener("contextmenu", (e) => {
+  viewBox.addEventListener("contextmenu", (e) => {
     e.preventDefault();
   });
-  document.addEventListener("auxclick", (e) => {
+  viewBox.addEventListener("auxclick", (e) => {
     if (e.button === 2) handleRotateRight();
   });
   let doubleClick = false;
-  document.addEventListener("mouseup", (e) => {
+  viewBox.addEventListener("mouseup", (e) => {
     if (!e.target.classList.contains("overlay-control") && e.button === 0) {
       if (!doubleClick) {
         doubleClick = true;
@@ -117,7 +119,7 @@ const listenRotate = () => {
       wheelTimer = null;
     }, WHEEL_EVENT_INTERVAL);
   }
-  document.addEventListener("wheel", (e) => {
+  viewBox.addEventListener("wheel", (e) => {
     if (!wheelThrottled) {
       wheelThrottled = true;
       if (e.deltaY < 0) {
@@ -132,7 +134,6 @@ const listenRotate = () => {
   });
 
   // touch controls //
-  const viewBox = document.querySelector(".view-box");
   let taps = 0;
   let tapTimer = null;
   viewBox.addEventListener("touchend", (e) => {

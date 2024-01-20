@@ -2,6 +2,7 @@
 import { initializeView, listenResize } from "../view/responsive-view";
 import initializeTrackingNextContainer from "../view/initialize-tracking-next-container";
 import { initializeTrackingPosition } from "../view/render-tiles";
+import listenModals from "../view/listen-modals";
 import { listenPan } from "../view/pan";
 import listenRotate from "../view/listen-rotate";
 import { listenZoom } from "../view/zoom";
@@ -20,6 +21,7 @@ const startGame = async () => {
   listenResize();
   listenPan();
   listenZoom();
+  listenModals();
 };
 
 export default startGame;

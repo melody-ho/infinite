@@ -27,7 +27,9 @@ const initializeTileSize = () => {
   );
 
   // update tile width in CSS
-  const nextInterface = document.querySelector(".no-hover");
+  const nextInterface = document.querySelector(
+    ".no-hover .next-tile-interface",
+  );
   nextInterface.style.setProperty("--tile-width", `${tiles.width}px`);
 };
 

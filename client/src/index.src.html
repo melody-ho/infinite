@@ -6,7 +6,186 @@
     <title>Infinite</title>
   </head>
   <body class="body">
+    <aside>
+      <dialog class="info-modal">
+        <div class="info-modal__wrapper">
+          <section class="info-modal__header">
+            <div class="info-modal__logotype">
+              <img src="./assets/logo/logo.svg" />
+              <p class="logotype__text">Infinite</p>
+            </div>
+            <input
+              alt="close info pop-up"
+              class="info-modal__close-btn"
+              src="./assets/ui/close.svg"
+              type="image"
+            />
+          </section>
+          <section>
+            <h1 class="info-modal__heading">about</h1>
+            <p class="info-modal__main-content">
+              Infinite is a puzzle game where you can endlessly expand the
+              galaxy by matching edges of hexagonal tiles.
+            </p>
+            <p class="info-modal__secondary-content">
+              Made with ✦ by Melody Ho.
+            </p>
+            <a
+              class="info-modal__github-link"
+              href="https://github.com/melody-ho/infinite"
+              >See on GitHub</a
+            >
+          </section>
+        </div>
+      </dialog>
+      <dialog class="tutorial-modal">
+        <div class="tutorial-modal__wrapper no-hover">
+          <section class="tutorial-modal__header">
+            <div class="tutorial-modal__logotype">
+              <img src="./assets/logo/logo.svg" />
+              <p class="logotype__text">Infinite</p>
+            </div>
+            <input
+              alt="close tutorial pop-up"
+              class="tutorial-modal__close-btn"
+              src="./assets/ui/close.svg"
+              type="image"
+            />
+          </section>
+          <section>
+            <h1 class="tutorial-modal__heading">how to play</h1>
+            <section class="tutorial-modal__warning">
+              <p class="tutorial-modal__warning-text">
+                <span aria-hidden class="tutorial-modal__warning-icon">!</span>
+                Edge users: The game will not work properly if visual search is
+                enabled.
+              </p>
+            </section>
+            <div class="tutorial-modal__content">
+              <section>
+                <h2 class="tutorial-modal__section-heading">Rotate tile.</h2>
+                <p class="tutorial-modal__section-content">
+                  Use buttons around preview of next tile, or triple-tap to
+                  rotate clockwise and double-tap to rotate counter-clockwise.
+                </p>
+              </section>
+              <section>
+                <h2 class="tutorial-modal__section-heading">Place tile.</h2>
+                <p class="tutorial-modal__section-content">
+                  Tap to place tile. Edges need to match with existing tiles.<br />There
+                  will always be <em>at least</em> one matching location.
+                </p>
+              </section>
+              <section>
+                <h2 class="tutorial-modal__section-heading">Adjust view.</h2>
+                <p class="tutorial-modal__section-content">Pan by dragging.</p>
+                <p class="tutorial-modal__section-content">
+                  Zoom by using <kbd class="zoom-button">+</kbd> and
+                  <kbd class="zoom-button">&#45;</kbd> buttons.
+                </p>
+              </section>
+            </div>
+          </section>
+        </div>
+        <div class="tutorial-modal__wrapper hover">
+          <section class="tutorial-modal__header">
+            <div class="tutorial-modal__logotype">
+              <img src="./assets/logo/logo.svg" />
+              <p class="logotype__text">Infinite</p>
+            </div>
+            <input
+              alt="close tutorial pop-up"
+              class="tutorial-modal__close-btn"
+              src="./assets/ui/close.svg"
+              type="image"
+            />
+          </section>
+          <section>
+            <h1 class="tutorial-modal__heading">how to play</h1>
+            <section class="tutorial-modal__warning">
+              <p class="tutorial-modal__warning-text">
+                <span aria-hidden class="tutorial-modal__warning-icon">!</span>
+                Edge users: The game will not work properly if visual search is
+                enabled.
+              </p>
+            </section>
+            <div class="tutorial-modal__content">
+              <section>
+                <h2 class="tutorial-modal__section-heading">Rotate tile.</h2>
+                <div class="tutorial-modal__subsections">
+                  <div>
+                    <h3 class="tutorial-modal__subsection-heading">
+                      clockwise
+                    </h3>
+                    <p class="tutorial-modal__subsection-content">
+                      right click, press <kbd class="keyboard-key">E</kbd>, or
+                      scroll up
+                    </p>
+                  </div>
+                  <div>
+                    <h3 class="tutorial-modal__subsection-heading">
+                      counter-clockwise
+                    </h3>
+                    <p class="tutorial-modal__subsection-content">
+                      double click, press <kbd class="keyboard-key">Q</kbd>, or
+                      scroll down
+                    </p>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <h2 class="tutorial-modal__section-heading">Place tile.</h2>
+                <p class="tutorial-modal__section-content">
+                  Click to place tile. Edges need to match with existing
+                  tiles.<br />There will always be <em>at least</em> one
+                  matching location.
+                </p>
+              </section>
+              <section>
+                <h2 class="tutorial-modal__section-heading">Adjust view.</h2>
+                <div class="tutorial-modal__subsections">
+                  <div>
+                    <h3 class="tutorial-modal__subsection-heading">pan</h3>
+                    <p class="tutorial-modal__subsection-content">
+                      <kbd class="keyboard-key">W</kbd
+                      ><kbd class="keyboard-key">A</kbd
+                      ><kbd class="keyboard-key">S</kbd
+                      ><kbd class="keyboard-key">D</kbd> or click and drag
+                    </p>
+                  </div>
+                  <div>
+                    <h3 class="tutorial-modal__subsection-heading">zoom</h3>
+                    <p class="tutorial-modal__subsection-content">
+                      <kbd class="keyboard-key">Z</kbd>and<kbd
+                        class="keyboard-key"
+                        >X</kbd
+                      >
+                      or <kbd class="zoom-button">+</kbd> and
+                      <kbd class="zoom-button">&#45;</kbd> buttons on screen
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+        </div>
+      </dialog>
+    </aside>
     <main class="main">
+      <div class="modal-buttons">
+        <input
+          alt="info"
+          class="modal-buttons__info-btn"
+          src="./assets/ui/info.svg"
+          type="image"
+        />
+        <input
+          alt="tutorial"
+          class="modal-buttons__tutorial-btn"
+          src="./assets/ui/help.svg"
+          type="image"
+        />
+      </div>
       <div class="next-tile-interface__zoom-wrapper no-hover zoom-wrapper">
         <div class="next-tile-interface">
           <input
