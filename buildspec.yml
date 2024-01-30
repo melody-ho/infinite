@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing dependencies...
+      - cd client/
+      - npm install
+      - cd ../server/
+      - npm install
+      - cd ..
+  pre_build:
+    commands:
+      - echo Preparing to build...
+  build:
+    commands:
+      - echo Build started on `date`
+      - cd client/
+      - npm run build
+      - cd ..
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - "README.md"
+    - "client/dist/**/*"
+    - "server/**/*"
+  name: infinite-$(date +%Y-%m-%d)
