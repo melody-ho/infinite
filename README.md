@@ -10,7 +10,7 @@
 
 ## Making Of
 
-**Technology:** HTML, CSS, JavaScript, Express
+**Technology:** HTML, CSS, JavaScript, Express, Jest
 
 ### Hexagonal Grid
 
