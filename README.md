@@ -4,7 +4,7 @@
 
 **[Infinite](https://infinite.melodyho.dev)** is a browser puzzle game in which users can continuously expand the galaxy by matching edges of hexagonal tiles. It's designed to always give valid moves, so the game and the resulting galaxy is *infinite*.
 
-**Play Here:** <https://infinite.melodyho.dev>
+**Play here:** <https://infinite.melodyho.dev>
 
 ![Infinite Game screenshot](/readme/screenshot.webp "Infinite Game Screenshot")
 
@@ -18,20 +18,20 @@ Hexagonal SVGs are positioned absolutely, utilizing a 2-dimensional coordinate s
 
 ### Dynamically Expanding Gameboard
 
-Tiles are dynamically added to a single parent element. The boundaries of the gameboard are defined by the panning boundaries, which are dynamically calculated each time a tile is added.
+Tiles are appended to a shared parent element when placed. The boundaries of the gameboard are defined by the panning boundaries, which are recalculated and thus expanded each time a tile is placed.
 
 ### Guaranteed Valid Move
 
-When the next tile is generated, a random location on the board is chosen to ensure a valid placement. Initially, the required edges for that location are generated, and subsequently, the remaining edges are filled in randomly. This approach ensures the existence of at least one valid move. However, the player has the flexibility to place the tile anywhere on the board, as long as its edges match those of the adjacent tiles.
+When the next tile is produced, a random location on the board is chosen, and the required edges for that location are generated. The remaining edges are then filled in randomly. This approach ensures the existence of at least one valid move (i.e., at the randomly selected location). However, the user has the flexibility to place the tile anywhere on the board, as long as its edges match those of the adjacent tiles.
 
 ## Known Issues
 
-- In **Microsoft Edge**, the hover menu for visual search that appears next to images will lead to errors. Please either disable visual search or consider using a different browser.
+- In **Microsoft Edge**, the hover-menu for visual search that appears next to images will lead to errors. Users are advised to either disable visual search or switch to a different browser.
 
 ## Features Roadmap
 
-- Game Save: Allow users to continue same game in separate sessions.
-- Zen mode: Allow users to hide the overlay.
+- **Game Save**: Allow users to continue the same game in separate sessions.
+- **Zen Mode**: Allow users to hide the overlay.
 
 ## Inspiration
 
